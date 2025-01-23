@@ -3,6 +3,7 @@ package com.jwellery.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jwellery.constant.ProductStatus;
 import com.jwellery.constant.Role;
+import com.jwellery.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +26,8 @@ public class UserEntity extends BaseEntity {
     String password;
     @Enumerated(EnumType.STRING)
     Role role;
+    @Enumerated(EnumType.STRING)
+    Status status;
     @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, orphanRemoval = true)
     List<AddressEntity> addressList;
     @OneToMany(mappedBy = "userEntity")

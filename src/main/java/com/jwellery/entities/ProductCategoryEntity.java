@@ -1,6 +1,7 @@
 package com.jwellery.entities;
 
 import com.jwellery.constant.ProductStatus;
+import com.jwellery.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +18,7 @@ public class ProductCategoryEntity extends BaseEntity {
     String name;
     String description;
     @Enumerated(EnumType.STRING)
-    ProductStatus status;
+    Status status;
     String imageUrl;
     @OneToMany(mappedBy = "productCategory",cascade = CascadeType.ALL)
     List<ProductTypeEntity> productTypes;

@@ -1,4 +1,4 @@
-package com.jwellery.util.dto.response;
+package com.jwellery.utility_dto.res;
 
 
 import lombok.AccessLevel;

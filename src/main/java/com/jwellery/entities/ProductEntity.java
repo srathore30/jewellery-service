@@ -2,6 +2,7 @@ package com.jwellery.entities;
 
 import com.jwellery.constant.InventoryStatus;
 import com.jwellery.constant.ProductStatus;
+import com.jwellery.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,7 +25,7 @@ public class ProductEntity extends BaseEntity{
     Integer itemCode;
     Boolean isAvailable;
     @Enumerated(EnumType.STRING)
-    ProductStatus productStatus;
+    Status status;
     @Enumerated(EnumType.STRING)
     InventoryStatus inventoryStatus;
     Float overAllRating;

@@ -1,7 +1,7 @@
 package com.jwellery.util;
 
 import com.jwellery.constant.ApiErrorCodes;
-import com.jwellery.util.dto.response.ResponseDto;
+import com.jwellery.utility_dto.res.ResponseDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

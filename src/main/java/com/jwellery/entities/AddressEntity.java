@@ -1,7 +1,10 @@
 package com.jwellery.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.jwellery.constant.Status;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +25,8 @@ public class AddressEntity extends BaseEntity{
     String city;
     String country;
     String tag;
+    @Enumerated(EnumType.STRING)
+    Status status;
     @ManyToOne
     UserEntity userEntity;
     Boolean isActive;

@@ -1,4 +1,4 @@
-package com.jwellery.exception.dto.response;
+package com.jwellery.utility_dto.res;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;

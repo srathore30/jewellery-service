@@ -1,7 +1,7 @@
 package com.jwellery.util;
 
 import com.jwellery.constant.Constants;
-import com.jwellery.util.dto.request.PageableRequest;
+import com.jwellery.utility_dto.req.PageableRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.PageRequest;

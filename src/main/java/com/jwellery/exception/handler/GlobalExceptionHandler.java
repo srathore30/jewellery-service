@@ -1,7 +1,7 @@
 package com.jwellery.exception.handler;
 
 import com.jwellery.constant.ApiErrorCodes;
-import com.jwellery.exception.dto.response.ErrorResponse;
+import com.jwellery.utility_dto.res.ErrorResponse;
 import com.jwellery.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;

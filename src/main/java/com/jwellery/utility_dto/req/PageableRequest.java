@@ -1,4 +1,4 @@
-package com.jwellery.util.dto.request;
+package com.jwellery.utility_dto.req;
 
 import com.jwellery.constant.Constants;
 import jakarta.validation.constraints.Pattern;
