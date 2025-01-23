@@ -26,16 +26,12 @@ public class UserEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     Role role;
     @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     List<AddressEntity> addressList;
     @OneToMany(mappedBy = "userEntity")
-    @JsonManagedReference
     List<OrderItemEntity> orderItemList;
     @OneToMany(mappedBy = "userEntity")
-    @JsonManagedReference
     List<WishlistEntity> wishListItemList;
     @OneToMany(mappedBy = "userEntity")
-    @JsonManagedReference
     List<CartEntity> cartItemList;
 
 }
