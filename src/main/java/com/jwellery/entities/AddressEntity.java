@@ -22,11 +22,8 @@ public class AddressEntity extends BaseEntity{
     String city;
     String country;
     String tag;
-
     @ManyToOne
-    @JsonBackReference
     UserEntity userEntity;
-
     Boolean isActive;
 
 }

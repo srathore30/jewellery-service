@@ -1,5 +1,6 @@
 package com.jwellery.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jwellery.constant.ProductStatus;
 import com.jwellery.constant.Role;
 import jakarta.persistence.*;
@@ -21,17 +22,20 @@ public class UserEntity extends BaseEntity {
     Long mobileNo;
     String gender;
     String imageUrl;
-    ProductStatus status;
     String password;
     @Enumerated(EnumType.STRING)
     Role role;
     @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     List<AddressEntity> addressList;
     @OneToMany(mappedBy = "userEntity")
+    @JsonManagedReference
     List<OrderItemEntity> orderItemList;
     @OneToMany(mappedBy = "userEntity")
+    @JsonManagedReference
     List<WishlistEntity> wishListItemList;
     @OneToMany(mappedBy = "userEntity")
+    @JsonManagedReference
     List<CartEntity> cartItemList;
 
 }

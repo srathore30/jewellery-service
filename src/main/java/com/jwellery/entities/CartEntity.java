@@ -14,10 +14,8 @@ import lombok.experimental.FieldDefaults;
 @Entity
 public class CartEntity extends BaseEntity{
     @ManyToOne
-    @JsonBackReference
     ProductEntity productEntity;
     @ManyToOne
-    @JsonBackReference
     UserEntity userEntity;
     Integer quantity;
 }
