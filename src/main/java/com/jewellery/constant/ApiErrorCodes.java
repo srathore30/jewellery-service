@@ -17,9 +17,7 @@ public enum ApiErrorCodes implements Error {
     ERROR_WHILE_SENDING_EMAIL(22232, "error while sending email"),
     INVALID_EMAIL_CODE(22233, "Invalid email code"),
     CANNOT_RESET_PASSWORD(22234, "cannot reset password"),
-    CART_ITEM_NOT_FOUND(22230, "Cart item not found"),
-    CART_EMPTY(22231, "Cart is empty"),
-    PRODUCT_OUT_OF_STOCK(22232, "Product is out of stock in cart"),
+    CART_ITEM_NOT_FOUND(22231, "Cart item not found"),
     PRODUCT_NOT_FOUND(22233,"Product not found" );
 
     private int errorCode;

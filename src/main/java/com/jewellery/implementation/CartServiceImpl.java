@@ -1,21 +1,22 @@
 package com.jewellery.implementation;
 
 import com.jewellery.constant.ApiErrorCodes;
-import com.jewellery.constant.InventoryStatus;
 import com.jewellery.dto.req.cart.CartRequest;
 import com.jewellery.dto.res.cart.CartResponse;
 import com.jewellery.entities.CartEntity;
 import com.jewellery.entities.ProductEntity;
 import com.jewellery.entities.UserEntity;
+import com.jewellery.exception.NoSuchElementFoundException;
 import com.jewellery.repositories.CartRepo;
 import com.jewellery.repositories.ProductRepo;
 import com.jewellery.repositories.UserRepo;
 import com.jewellery.services.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,72 +25,67 @@ public class CartServiceImpl implements CartService {
     private final CartRepo cartRepo;
     private final ProductRepo productRepo;
     private final UserRepo userRepo;
-
     @Override
     public CartResponse addToCart(Long userId, CartRequest cartRequest) {
-
-        UserEntity user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException(ApiErrorCodes.USER_NOT_FOUND.getErrorMessage()));
-
-        ProductEntity product = productRepo.findById(cartRequest.getProductId())
-                .orElseThrow(() -> new RuntimeException(ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage()));
-
-        InventoryStatus inventoryStatus = productRepo.getInventoryStatusById(cartRequest.getProductId());
-        if (inventoryStatus == InventoryStatus.OUT_OF_STOCK) {
-            throw new RuntimeException(ApiErrorCodes.PRODUCT_OUT_OF_STOCK.getErrorMessage());
-        }
-
-        CartEntity existingCart = cartRepo.findByUserEntityIdAndProductEntityId(userId, cartRequest.getProductId())
-                .orElse(null);
-
-        if (existingCart != null) {
+        CartEntity cart = mapToEntity(userId, cartRequest);
+        Optional<CartEntity> existingCartOpt = cartRepo.findByUserEntityIdAndProductEntityId(userId, cartRequest.getProductId());
+        if (existingCartOpt.isPresent()) {
+            CartEntity existingCart = existingCartOpt.get();
             existingCart.setQuantity(existingCart.getQuantity() + cartRequest.getQuantity());
             return mapToResponse(cartRepo.save(existingCart));
         }
-
-        CartEntity cart = new CartEntity();
-        cart.setUserEntity(user);
-        cart.setProductEntity(product);
-        cart.setQuantity(cartRequest.getQuantity());
         return mapToResponse(cartRepo.save(cart));
     }
 
+
     @Override
-    public List<CartResponse> getCartItems(Long userId) {
-        return cartRepo.findAll().stream()
-                .filter(cart -> cart.getUserEntity().getId().equals(userId))
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+    public Page<CartResponse> getCartItems(Long userId, int page, int size) {
+        Page<CartEntity> cartPage = cartRepo.findByUserEntityId(userId, PageRequest.of(page, size));
+        return cartPage.map(this::mapToResponse);
     }
 
     @Override
     public CartResponse updateCartItem(Long cartId, Integer quantity) {
         CartEntity cart = cartRepo.findById(cartId)
-                .orElseThrow(() -> new RuntimeException(ApiErrorCodes.CART_ITEM_NOT_FOUND.getErrorMessage()));
+                .orElseThrow(() -> new NoSuchElementFoundException(
+                        ApiErrorCodes.CART_ITEM_NOT_FOUND.getErrorCode(),
+                        ApiErrorCodes.CART_ITEM_NOT_FOUND.getErrorMessage())
+                );
 
         cart.setQuantity(quantity);
         return mapToResponse(cartRepo.save(cart));
     }
 
     @Override
-    public void removeCartItem(Long cartId) {
-        if (!cartRepo.existsById(cartId)) {
-            throw new RuntimeException(ApiErrorCodes.CART_ITEM_NOT_FOUND.getErrorMessage());
-        }
-        cartRepo.deleteById(cartId);
+    public CartResponse removeCartItem(Long cartId) {
+        CartEntity cart = cartRepo.findById(cartId)
+                .orElseThrow(() -> new NoSuchElementFoundException(
+                        ApiErrorCodes.CART_ITEM_NOT_FOUND.getErrorCode(),
+                        ApiErrorCodes.CART_ITEM_NOT_FOUND.getErrorMessage())
+                );
+        cartRepo.delete(cart);
+        return mapToResponse(cart);
     }
 
-    @Override
-    public void clearCart(Long userId) {
-        List<CartEntity> userCart = cartRepo.findAll().stream()
-                .filter(cart -> cart.getUserEntity().getId().equals(userId))
-                .collect(Collectors.toList());
 
-        if (userCart.isEmpty()) {
-            throw new RuntimeException(ApiErrorCodes.CART_EMPTY.getErrorMessage());
-        }
+    private CartEntity mapToEntity(Long userId, CartRequest cartRequest) {
+        UserEntity user = userRepo.findById(userId)
+                .orElseThrow(() -> new NoSuchElementFoundException(
+                        ApiErrorCodes.USER_NOT_FOUND.getErrorCode(),
+                        ApiErrorCodes.USER_NOT_FOUND.getErrorMessage())
+                );
 
-        cartRepo.deleteAll(userCart);
+        ProductEntity product = productRepo.findById(cartRequest.getProductId())
+                .orElseThrow(() -> new NoSuchElementFoundException(
+                        ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorCode(),
+                        ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage())
+                );
+
+        CartEntity cart = new CartEntity();
+        cart.setUserEntity(user);
+        cart.setProductEntity(product);
+        cart.setQuantity(cartRequest.getQuantity());
+        return cart;
     }
 
     private CartResponse mapToResponse(CartEntity cart) {

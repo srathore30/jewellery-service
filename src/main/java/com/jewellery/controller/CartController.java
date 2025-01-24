@@ -4,10 +4,10 @@ import com.jewellery.dto.req.cart.CartRequest;
 import com.jewellery.dto.res.cart.CartResponse;
 import com.jewellery.services.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
@@ -15,31 +15,34 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
-
-    @PostMapping("/{userId}/add")
-    public ResponseEntity<CartResponse> addToCart(@PathVariable Long userId, @RequestBody CartRequest cartRequest) {
-        return ResponseEntity.ok(cartService.addToCart(userId, cartRequest));
+    @PostMapping("/add")
+    public ResponseEntity<CartResponse> addToCart(@RequestBody CartRequest cartRequest) {
+        CartResponse response = cartService.addToCart(cartRequest.getUserId(), cartRequest);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+
     @GetMapping("/{userId}")
-    public ResponseEntity<List<CartResponse>> getCartItems(@PathVariable Long userId) {
-        return ResponseEntity.ok(cartService.getCartItems(userId));
+    public ResponseEntity<Page<CartResponse>> getAllCartItemByUserId(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<CartResponse> response = cartService.getCartItems(userId, page, size);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{cartId}/update")
-    public ResponseEntity<CartResponse> updateCartItem(@PathVariable Long cartId, @RequestParam Integer quantity) {
-        return ResponseEntity.ok(cartService.updateCartItem(cartId, quantity));
+    public ResponseEntity<CartResponse> updateCartItem(
+            @PathVariable Long cartId,
+            @RequestParam Integer quantity) {
+        CartResponse response = cartService.updateCartItem(cartId, quantity);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{cartId}/remove")
-    public ResponseEntity<Void> removeCartItem(@PathVariable Long cartId) {
-        cartService.removeCartItem(cartId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<CartResponse> removeCartItem(@PathVariable Long cartId) {
+        CartResponse response = cartService.removeCartItem(cartId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{userId}/clear")
-    public ResponseEntity<Void> clearCart(@PathVariable Long userId) {
-        cartService.clearCart(userId);
-        return ResponseEntity.noContent().build();
-    }
 }

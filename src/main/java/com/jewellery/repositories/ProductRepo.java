@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepo extends JpaRepository<ProductEntity,Long> {
-    @Query("SELECT p.inventoryStatus FROM ProductEntity p WHERE p.id = :productId")
-    InventoryStatus getInventoryStatusById(@Param("productId") Long productId);
+
 }
