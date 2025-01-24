@@ -1,6 +1,7 @@
-package com.jewellery.entities;
+package com.jewellery.dto.req;
 
-import jakarta.persistence.Entity;
+import com.jewellery.entities.ProductEntity;
+import com.jewellery.entities.UserEntity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,11 +11,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
-public class WishlistEntity extends BaseEntity{
-    @ManyToOne
-    ProductEntity productEntity;
-    @ManyToOne
-    UserEntity userEntity;
+public class WishlistReq {
+
+    Long productId;
+    Long userId;
     Integer quantity;
 }
