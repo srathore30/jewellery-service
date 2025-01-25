@@ -1,7 +1,7 @@
 package com.jewellery.implementation;
 
-import com.jewellery.dto.req.WishlistReq;
-import com.jewellery.dto.res.WishlistRes;
+import com.jewellery.dto.req.wishlist.WishlistReq;
+import com.jewellery.dto.res.wishlist.WishlistRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.ProductEntity;
 import com.jewellery.entities.UserEntity;
@@ -12,6 +12,7 @@ import com.jewellery.repositories.ProductRepo;
 import com.jewellery.repositories.UserRepo;
 import com.jewellery.repositories.WishlistRepo;
 import com.jewellery.service.WishlistService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +24,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class WishlistServiceImpl implements WishlistService {
     private final UserRepo userRepo;
     private final ProductRepo productRepo;
     private final WishlistRepo wishlistRepo;
-
-    public WishlistServiceImpl(WishlistRepo wishlistRepo,UserRepo userRepo, ProductRepo productRepo) {
-        this.wishlistRepo = wishlistRepo;
-        this.userRepo = userRepo;
-        this.productRepo = productRepo;
-    }
 
     @Override
     public WishlistRes createWishlist(WishlistReq wishlistReq) {
@@ -40,29 +36,22 @@ public class WishlistServiceImpl implements WishlistService {
                 .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorCode(),ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage()));
         UserEntity user = userRepo.findById(wishlistReq.getUserId())
                 .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(),ApiErrorCodes.USER_NOT_FOUND.getErrorMessage()));
-        boolean exists = wishlistRepo.existsByUserEntityAndProductEntity(user, product);
+        boolean exists = wishlistRepo.existsByUserEntityByIdAndProductEntityById(user.getId(), product.getId());
         if (exists) {
             throw new ValidationException(ApiErrorCodes.PRODUCT_ALREADY_EXIST.getErrorCode(),ApiErrorCodes.PRODUCT_ALREADY_EXIST.getErrorMessage());
         }
 
-        WishlistEntity wishlistEntity = mapDtoToEntity(wishlistReq, product, user);
-        WishlistEntity savedComment = wishlistRepo.save(wishlistEntity);
-        return mapEntityToDto(savedComment);
+        WishlistEntity wishlistEntity = mapDtoToEntity(wishlistReq);
+        WishlistEntity savedWishList = wishlistRepo.save(wishlistEntity);
+        return mapEntityToDto(savedWishList);
     }
 
-    public WishlistRes updateWishlist(Long id, WishlistReq wishlistReq) {
+    @Override
+    public WishlistRes updateWishlist(Long id, Integer quantity) {
         WishlistEntity wishlistEntity = wishlistRepo.findById(id)
                 .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.WISHLIST_ITEM_NOT_FOUND.getErrorCode(), ApiErrorCodes.WISHLIST_ITEM_NOT_FOUND.getErrorMessage()));
 
-        UserEntity user = userRepo.findById(wishlistReq.getUserId())
-                .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(), ApiErrorCodes.USER_NOT_FOUND.getErrorMessage()));
-
-        ProductEntity product = productRepo.findById(wishlistReq.getProductId())
-                .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorCode(), ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage()));
-
-        wishlistEntity.setUserEntity(user);
-        wishlistEntity.setProductEntity(product);
-        wishlistEntity.setQuantity(wishlistReq.getQuantity());
+        wishlistEntity.setQuantity(quantity);
 
         return mapEntityToDto(wishlistRepo.save(wishlistEntity));
     }
@@ -80,14 +69,11 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public PaginatedResp<WishlistRes> getAllWishlistByUserId(int page, int size, String sortBy, String sortDirection, Long userId) {
-        UserEntity user = userRepo.findById(userId)
-                .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(), ApiErrorCodes.USER_NOT_FOUND.getErrorMessage()));
-
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<WishlistEntity> wishlistPage = wishlistRepo.findAllByUserEntity(user, pageable);
+        Page<WishlistEntity> wishlistPage = wishlistRepo.findAllByUserEntityById(userId, pageable);
 
         List<WishlistRes> responseList = wishlistPage.getContent()
                 .stream()
@@ -121,7 +107,11 @@ public class WishlistServiceImpl implements WishlistService {
         return wishlistRes;
     }
 
-    private WishlistEntity mapDtoToEntity(WishlistReq wishlistReq, ProductEntity product, UserEntity user) {
+    private WishlistEntity mapDtoToEntity(WishlistReq wishlistReq) {
+        ProductEntity product = productRepo.findById(wishlistReq.getProductId())
+                .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorCode(), ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage()));
+        UserEntity user = userRepo.findById(wishlistReq.getUserId())
+                .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(), ApiErrorCodes.USER_NOT_FOUND.getErrorMessage()));
         WishlistEntity wishlistEntity = new WishlistEntity();
         wishlistEntity.setProductEntity(product);
         wishlistEntity.setUserEntity(user);

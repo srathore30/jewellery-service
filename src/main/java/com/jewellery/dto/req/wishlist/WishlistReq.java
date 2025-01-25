@@ -1,5 +1,8 @@
-package com.jewellery.dto.res;
+package com.jewellery.dto.req.wishlist;
 
+import com.jewellery.entities.ProductEntity;
+import com.jewellery.entities.UserEntity;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,11 +11,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WishlistRes {
-    Long Id;
+public class WishlistReq {
+
     Long productId;
-    String productName;
     Long userId;
-    String userName;
     Integer quantity;
 }
