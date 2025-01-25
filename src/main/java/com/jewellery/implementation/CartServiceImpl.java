@@ -8,6 +8,7 @@ import com.jewellery.entities.CartEntity;
 import com.jewellery.entities.ProductEntity;
 import com.jewellery.entities.UserEntity;
 import com.jewellery.exception.NoSuchElementFoundException;
+import com.jewellery.exception.ValidationException;
 import com.jewellery.repositories.CartRepo;
 import com.jewellery.repositories.ProductRepo;
 import com.jewellery.repositories.UserRepo;
@@ -32,17 +33,31 @@ public class CartServiceImpl implements CartService {
     private final UserRepo userRepo;
 
     @Override
-    public CartResponse addToCart(Long userId, CartRequest cartRequest) {
-        Optional<CartEntity> existingCartOpt = cartRepo.findByUserEntityIdAndProductEntityId(userId, cartRequest.getProductId());
-        if (existingCartOpt.isPresent()) {
-            CartEntity existingCart = existingCartOpt.get();
-            existingCart.setQuantity(existingCart.getQuantity() + cartRequest.getQuantity());
-            return mapToResponse(cartRepo.save(existingCart));
+    public CartResponse addToCart(CartRequest cartRequest) {
+        Long userId = cartRequest.getUserId();
+        ProductEntity product = productRepo.findById(cartRequest.getProductId())
+                .orElseThrow(() -> new NoSuchElementFoundException(
+                        ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorCode(),
+                        ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage())
+                );
+        UserEntity user = userRepo.findById(userId)
+                .orElseThrow(() -> new NoSuchElementFoundException(
+                        ApiErrorCodes.USER_NOT_FOUND.getErrorCode(),
+                        ApiErrorCodes.USER_NOT_FOUND.getErrorMessage())
+                );
+        boolean exists = cartRepo.existsByUserEntityIdAndProductEntityId(user.getId(), product.getId());
+        if (exists) {
+            throw new ValidationException(
+                    ApiErrorCodes.PRODUCT_ALREADY_EXIST.getErrorCode(),
+                    ApiErrorCodes.PRODUCT_ALREADY_EXIST.getErrorMessage()
+            );
         }
-
-        CartEntity cart = mapToEntity(userId, cartRequest);
-        return mapToResponse(cartRepo.save(cart));
+        CartEntity cartEntity = mapToEntity(userId, cartRequest);
+        CartEntity savedCart = cartRepo.save(cartEntity);
+        return mapToResponse(savedCart);
     }
+
+
 
     @Override
     public CartResponse getCartItemById(Long cartId) {

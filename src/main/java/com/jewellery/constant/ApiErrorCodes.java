@@ -18,7 +18,8 @@ public enum ApiErrorCodes implements Error {
     INVALID_EMAIL_CODE(22233, "Invalid email code"),
     CANNOT_RESET_PASSWORD(22234, "cannot reset password"),
     CART_ITEM_NOT_FOUND(22231, "Cart item not found"),
-    PRODUCT_NOT_FOUND(22233,"Product not found" );
+    PRODUCT_NOT_FOUND(22233,"Product not found" ),
+    PRODUCT_ALREADY_EXIST(22235,"Product already exist" );
 
     private int errorCode;
     private String errorMessage;

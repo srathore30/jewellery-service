@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CartRepo extends JpaRepository<CartEntity, Long> {
 
-    Optional<CartEntity> findByUserEntityIdAndProductEntityId(Long userId, Long productId);
+    boolean existsByUserEntityIdAndProductEntityId(Long userId, Long productId);
     Page<CartEntity> findByUserEntityId(Long userId, Pageable pageable);
 }

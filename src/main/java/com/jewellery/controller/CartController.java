@@ -17,10 +17,12 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/create")
-    public ResponseEntity<CartResponse> createCartItem(@RequestParam Long userId, @RequestBody CartRequest cartRequest) {
-        CartResponse response = cartService.addToCart(userId, cartRequest);
+    public ResponseEntity<CartResponse> createCartItem(@RequestBody CartRequest cartRequest) {
+        CartResponse response = cartService.addToCart(cartRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+
     @GetMapping("/{cartId}")
     public ResponseEntity<CartResponse> getCartItemById(@PathVariable Long cartId) {
         CartResponse response = cartService.getCartItemById(cartId);
