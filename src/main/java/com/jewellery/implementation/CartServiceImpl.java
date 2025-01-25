@@ -12,7 +12,7 @@ import com.jewellery.exception.ValidationException;
 import com.jewellery.repositories.CartRepo;
 import com.jewellery.repositories.ProductRepo;
 import com.jewellery.repositories.UserRepo;
-import com.jewellery.services.CartService;
+import com.jewellery.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -3,7 +3,7 @@ package com.jewellery.controller;
 import com.jewellery.dto.req.cart.CartRequest;
 import com.jewellery.dto.res.cart.CartResponse;
 import com.jewellery.dto.res.util.PaginatedResp;
-import com.jewellery.services.CartService;
+import com.jewellery.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,6 @@ public class CartController {
         CartResponse response = cartService.addToCart(cartRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 
     @GetMapping("/{cartId}")
     public ResponseEntity<CartResponse> getCartItemById(@PathVariable Long cartId) {

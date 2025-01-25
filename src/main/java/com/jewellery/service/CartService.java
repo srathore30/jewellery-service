@@ -1,4 +1,4 @@
-package com.jewellery.services;
+package com.jewellery.service;
 
 
 import com.jewellery.dto.req.cart.CartRequest;
