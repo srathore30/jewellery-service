@@ -36,7 +36,7 @@ public class WishlistServiceImpl implements WishlistService {
                 .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorCode(),ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage()));
         UserEntity user = userRepo.findById(wishlistReq.getUserId())
                 .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(),ApiErrorCodes.USER_NOT_FOUND.getErrorMessage()));
-        boolean exists = wishlistRepo.existsByUserEntityByIdAndProductEntityById(user.getId(), product.getId());
+        boolean exists = wishlistRepo.existsByUserEntityIdAndProductEntityId(user.getId(), product.getId());
         if (exists) {
             throw new ValidationException(ApiErrorCodes.PRODUCT_ALREADY_EXIST.getErrorCode(),ApiErrorCodes.PRODUCT_ALREADY_EXIST.getErrorMessage());
         }
@@ -73,7 +73,7 @@ public class WishlistServiceImpl implements WishlistService {
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<WishlistEntity> wishlistPage = wishlistRepo.findAllByUserEntityById(userId, pageable);
+        Page<WishlistEntity> wishlistPage = wishlistRepo.findAllByUserEntityId(userId, pageable);
 
         List<WishlistRes> responseList = wishlistPage.getContent()
                 .stream()

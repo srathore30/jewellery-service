@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WishlistRepo extends JpaRepository<WishlistEntity,Long> {
-    boolean existsByUserEntityByIdAndProductEntityById(Long userId, Long productId);
-    Page<WishlistEntity> findAllByUserEntityById(Long userId, Pageable pageable);
+    boolean existsByUserEntityIdAndProductEntityId(Long userId, Long productId);
+    Page<WishlistEntity> findAllByUserEntityId(Long userId, Pageable pageable);
 
 }
