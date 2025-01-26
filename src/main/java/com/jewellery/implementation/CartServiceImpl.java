@@ -34,17 +34,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse addToCart(CartRequest cartRequest) {
         Long userId = cartRequest.getUserId();
-        ProductEntity product = productRepo.findById(cartRequest.getProductId())
-                .orElseThrow(() -> new NoSuchElementFoundException(
-                        ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorCode(),
-                        ApiErrorCodes.PRODUCT_NOT_FOUND.getErrorMessage())
-                );
-        UserEntity user = userRepo.findById(userId)
-                .orElseThrow(() -> new NoSuchElementFoundException(
-                        ApiErrorCodes.USER_NOT_FOUND.getErrorCode(),
-                        ApiErrorCodes.USER_NOT_FOUND.getErrorMessage())
-                );
-        boolean exists = cartRepo.existsByUserEntityIdAndProductEntityId(user.getId(), product.getId());
+        boolean exists = cartRepo.existsByUserEntityIdAndProductEntityId(userId, cartRequest.getProductId());
         if (exists) {
             throw new ValidationException(
                     ApiErrorCodes.PRODUCT_ALREADY_EXIST.getErrorCode(),
@@ -55,9 +45,6 @@ public class CartServiceImpl implements CartService {
         CartEntity savedCart = cartRepo.save(cartEntity);
         return mapToResponse(savedCart);
     }
-
-
-
     @Override
     public CartResponse getCartItemById(Long cartId) {
         CartEntity cart = cartRepo.findById(cartId)
