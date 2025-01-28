@@ -20,9 +20,3 @@ server:
 application:
   config:
     trace: true
-
-aws:
-  access-key-id: AKIAVY2PHDFITEMWN5UB
-  secret-access-key: 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
-  bucket: jwellery-bucket
-  region: ap-south-1
