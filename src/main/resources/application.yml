@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/jewellery_db
     username: root
-    password: sonia@123
+    password: Princemitt@l26
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -20,3 +20,9 @@ server:
 application:
   config:
     trace: true
+
+aws:
+  access-key-id: AKIAVY2PHDFITEMWN5UB
+  secret-access-key: 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
+  bucket: jwellery-bucket
+  region: ap-south-1
