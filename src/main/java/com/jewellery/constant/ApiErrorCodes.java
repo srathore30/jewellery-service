@@ -21,7 +21,10 @@ public enum ApiErrorCodes implements Error {
     CART_ITEM_NOT_FOUND(22231, "Cart item not found"),
     PRODUCT_NOT_FOUND(22235,"Product not found" ),
     WISHLIST_ITEM_NOT_FOUND(22236,"Wishlist item not found"),
-    PRODUCT_ALREADY_EXIST(22237,"This item is already present in the wishlist.");
+    PRODUCT_ALREADY_EXIST(22237,"This item is already present in the wishlist."),
+    CATEGORY_NOT_FOUND(22238,"Category not found"),
+    PRODUCT_TYPE_NOT_FOUND(22239,"Product type not found"),
+    PRODUCT_TYPE_ALREADY_EXIST(22240,"Product Type Already exist");
 
 
     private int errorCode;
