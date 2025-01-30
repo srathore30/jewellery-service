@@ -3,9 +3,11 @@ package com.jewellery.implementation;
 import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.req.productcategory.ProductCategoryRequest;
+import com.jewellery.dto.res.productType.ProductTypeRes;
 import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.ProductCategoryEntity;
+import com.jewellery.entities.ProductTypeEntity;
 import com.jewellery.exception.NoSuchElementFoundException;
 import com.jewellery.repositories.ProductCategoryRepo;
 import com.jewellery.service.ProductCategoryService;
@@ -111,6 +113,17 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         response.setName(entity.getName());
         response.setDescription(entity.getDescription());
         response.setImageUrl(entity.getImageUrl());
+        List<ProductTypeRes> productTypeResList = entity.getProductTypes()
+                .stream()
+                .map(productTypeEntity -> {
+                    ProductTypeRes productTypeRes = new ProductTypeRes();
+                    productTypeRes.setId(productTypeEntity.getId());
+                    productTypeRes.setName(productTypeEntity.getName());
+                    return productTypeRes;
+                })
+                .collect(Collectors.toList());
+
+        response.setProductTypes(productTypeResList);
         return response;
     }
 }

@@ -1,6 +1,7 @@
 package com.jewellery.implementation;
 
 import com.jewellery.dto.req.wishlist.WishlistReq;
+import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.wishlist.WishlistRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.ProductEntity;
@@ -94,11 +95,15 @@ public class WishlistServiceImpl implements WishlistService {
     private WishlistRes mapEntityToDto(WishlistEntity wishlistEntity) {
         WishlistRes wishlistRes = new WishlistRes();
         wishlistRes.setId(wishlistEntity.getId());
-        wishlistRes.setProductId(wishlistEntity.getProductEntity().getId());
         wishlistRes.setUserId(wishlistEntity.getUserEntity().getId());
         wishlistRes.setUserName(wishlistEntity.getUserEntity().getName());
-        wishlistRes.setProductName(wishlistEntity.getProductEntity().getModelName());
         wishlistRes.setQuantity(wishlistEntity.getQuantity());
+
+        ProductEntity product = wishlistEntity.getProductEntity();
+        ProductRes productRes = new ProductRes();
+        productRes.setId(product.getId());
+        productRes.setModelName(product.getModelName());
+        wishlistRes.setProduct(productRes);
 
         return wishlistRes;
     }

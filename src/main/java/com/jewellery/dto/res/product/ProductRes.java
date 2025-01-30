@@ -3,6 +3,7 @@ package com.jewellery.dto.res.product;
 import com.jewellery.constant.InventoryStatus;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.res.productType.ProductTypeRes;
+import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,13 +24,12 @@ public class ProductRes {
     Boolean isAvailable;
     Status status;
     InventoryStatus inventoryStatus;
-   // Float overAllRating;
     Double sellingPrice;
     List<String> productImages;
     Double originalPrice;
     Date createdDate;
     String highlights;
     String keyFeatures;
-    ProductTypeRes productTypeName;
-    String productCategoryName;
+    ProductTypeRes productType;
+    ProductCategoryResponse productCategory;
 }

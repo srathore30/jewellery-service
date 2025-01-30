@@ -4,6 +4,7 @@ import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.req.productType.ProductTypeReq;
 import com.jewellery.dto.res.productType.ProductTypeRes;
+import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.ProductCategoryEntity;
 import com.jewellery.entities.ProductTypeEntity;
@@ -116,7 +117,11 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         response.setName(entity.getName());
         response.setImageUrl(entity.getImageUrl());
         response.setStatus(entity.getStatus());
-        response.setProductCategoryId(entity.getProductCategory().getId());
+        ProductCategoryEntity category = entity.getProductCategory();
+        ProductCategoryResponse categoryResponse = new ProductCategoryResponse();
+        categoryResponse.setId(category.getId());
+        categoryResponse.setName(category.getName());
+        response.setProductCategory(categoryResponse);
         return response;
     }
 
@@ -130,8 +135,5 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         entity.setProductCategory(category);
         return entity;
     }
-
-
-
 
 }

@@ -5,6 +5,7 @@ import com.jewellery.constant.Status;
 import com.jewellery.dto.req.product.ProductReq;
 import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.productType.ProductTypeRes;
+import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.*;
 import com.jewellery.exception.NoSuchElementFoundException;
@@ -149,9 +150,19 @@ public class ProductServiceImpl implements ProductService {
         productRes.setOriginalPrice(productEntity.getOriginalPrice());
         productRes.setHighlights(productEntity.getHighlights());
         productRes.setKeyFeatures(productEntity.getKeyFeatures());
-        productRes.setProductTypeName(productRes.getProductTypeName());
-        productRes.setProductCategoryName(productEntity.getProductCategory().getName());
         productRes.setCreatedDate(productEntity.getCreatedDate());
+
+        ProductCategoryEntity productCategory = productEntity.getProductCategory();
+        ProductCategoryResponse categoryResponse = new ProductCategoryResponse();
+        categoryResponse.setId(productCategory.getId());
+        categoryResponse.setName(productCategory.getName());
+        productRes.setProductCategory(categoryResponse);
+
+        ProductTypeEntity productType = productEntity.getProductType();
+        ProductTypeRes productTypeRes = new ProductTypeRes();
+        productTypeRes.setId(productType.getId());
+        productTypeRes.setName(productType.getName());
+        productRes.setProductType(productTypeRes);
 
         return productRes;
     }
