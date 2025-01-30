@@ -28,8 +28,8 @@ public enum ApiErrorCodes implements Error {
     USER_ALREADY_EXIST(22241,"user already exists "),
     INVALID_MOBILE_NUMBER(22242,"invalid mobile number "),
     ROLE_LIST_NOT_PRESENT(22243,"role list not present "),
-    INVALID_EMAIL(22244,"invalid email");
-
+    INVALID_EMAIL(22244,"invalid email"),
+    PRODUCT_CATEGORY_NOT_FOUND(222341,"Product Category not found");
 
 
     private int errorCode;
