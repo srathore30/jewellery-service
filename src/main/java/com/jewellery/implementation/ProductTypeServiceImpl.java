@@ -4,6 +4,7 @@ import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.req.productType.ProductTypeReq;
 import com.jewellery.dto.res.productType.ProductTypeRes;
+import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.ProductCategoryEntity;
 import com.jewellery.entities.ProductTypeEntity;
@@ -116,7 +117,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         response.setName(entity.getName());
         response.setImageUrl(entity.getImageUrl());
         response.setStatus(entity.getStatus());
-        response.setProductCategoryId(entity.getProductCategory().getId());
+        response.setProductCategory(mapCategoryEntityToDto(entity.getProductCategory()));
         return response;
     }
 
@@ -126,12 +127,18 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         ProductTypeEntity entity = new ProductTypeEntity();
         entity.setName(request.getName());
         entity.setStatus(Status.ACTIVE);
-        entity.setImageUrl((request.getImageUrl()));
+        entity.setImageUrl(request.getImageUrl());
         entity.setProductCategory(category);
         return entity;
     }
 
-
-
+    private ProductCategoryResponse mapCategoryEntityToDto(ProductCategoryEntity entity) {
+        ProductCategoryResponse response = new ProductCategoryResponse();
+        response.setId(entity.getId());
+        response.setName(entity.getName());
+        response.setDescription(entity.getDescription());
+        response.setImageUrl(entity.getImageUrl());
+        return response;
+    }
 
 }

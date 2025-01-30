@@ -3,6 +3,7 @@ package com.jewellery.implementation;
 import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.dto.req.cart.CartRequest;
 import com.jewellery.dto.res.cart.CartResponse;
+import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.CartEntity;
 import com.jewellery.entities.ProductEntity;
@@ -123,10 +124,28 @@ public class CartServiceImpl implements CartService {
     private CartResponse mapToResponse(CartEntity cart) {
         CartResponse response = new CartResponse();
         response.setCartId(cart.getId());
-        response.setProductName(cart.getProductEntity().getTitle());
-        response.setProductPrice(cart.getProductEntity().getSellingPrice());
+        response.setProductRes(mapProductEntityToDto(cart.getProductEntity()));
         response.setQuantity(cart.getQuantity());
         response.setTotalPrice(cart.getQuantity() * cart.getProductEntity().getSellingPrice());
         return response;
+    }
+
+    private ProductRes mapProductEntityToDto(ProductEntity productEntity) {
+        ProductRes productRes = new ProductRes();
+        productRes.setId(productEntity.getId());
+        productRes.setTitle(productEntity.getTitle());
+        productRes.setDescription(productEntity.getDescription());
+        productRes.setModelName(productEntity.getModelName());
+        productRes.setItemCode(productEntity.getItemCode());
+        productRes.setAvailable(productEntity.isAvailable());
+        productRes.setStatus(productEntity.getStatus());
+        productRes.setInventoryStatus(productEntity.getInventoryStatus());
+        productRes.setSellingPrice(productEntity.getSellingPrice());
+        productRes.setProductImages(productEntity.getProductImages());
+        productRes.setOriginalPrice(productEntity.getOriginalPrice());
+        productRes.setHighlights(productEntity.getHighlights());
+        productRes.setKeyFeatures(productEntity.getKeyFeatures());
+        productRes.setCreatedDate(productEntity.getCreatedDate());
+        return productRes;
     }
 }
