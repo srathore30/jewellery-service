@@ -3,9 +3,7 @@ package com.jewellery.implementation;
 import com.jewellery.AuthUtils.JwtHelper;
 import com.jewellery.Configs.AuthConfig;
 import com.jewellery.constant.ApiErrorCodes;
-import com.jewellery.constant.Role;
 import com.jewellery.constant.Status;
-import com.jewellery.dto.req.User.ImageUploadDto;
 import com.jewellery.dto.req.User.JwtRequest;
 import com.jewellery.dto.req.User.UserRequestDto;
 import com.jewellery.dto.req.User.UserUpdateRequestDto;
@@ -24,14 +22,11 @@ import com.jewellery.util.Validator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -132,7 +127,7 @@ public class AuthServiceImpl implements AuthService {
     public UserEntity mapDtoToEntity(UserRequestDto userReqDto) {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userReqDto.getEmail());
-        if (userReqDto.getUserPhotoUrl() != null) {
+        if(!Objects.equals(userReqDto.getUserPhotoUrl(), "")){
             userEntity.setImageUrl(imageUploader.uploadFile(userReqDto.getUserPhotoUrl()));
         }
         userEntity.setMobileNo(userReqDto.getMobile());
@@ -181,6 +176,11 @@ public class AuthServiceImpl implements AuthService {
             throw new NoSuchElementFoundException(ApiErrorCodes.INVALID_EMAIL_CODE.getErrorCode(), ApiErrorCodes.INVALID_EMAIL_CODE.getErrorMessage());
         }
         return optionalUser.get().getId();
+    }
+    @Override
+    public String sendOtpToEmail(String email) {
+        emailOtpService.sendEmailCode(email);
+        return "otp send";
     }
 }
 

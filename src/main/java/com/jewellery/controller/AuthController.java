@@ -1,6 +1,5 @@
 package com.jewellery.controller;
 import com.jewellery.AuthUtils.JwtHelper;
-import com.jewellery.dto.req.User.ImageUploadDto;
 import com.jewellery.dto.req.User.JwtRequest;
 import com.jewellery.dto.req.User.UserRequestDto;
 import com.jewellery.dto.req.User.UserUpdateRequestDto;
@@ -46,19 +45,6 @@ public class AuthController {
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @GetMapping("/validateToken")
-    public ResponseEntity<String> validateToken(@RequestParam String token) {
-        try {
-            if (helper.validateOnlyToken(token)) {
-                return new ResponseEntity<>("valid token", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Not valid token", HttpStatus.UNAUTHORIZED);
-            }
-        } catch (ExpiredJwtException e) {
-            return new ResponseEntity<>("Expired token", HttpStatus.UNAUTHORIZED);
-        }
-    }
-
     @GetMapping("/resetPassword")
     public ResponseEntity<String> resetPassword(@RequestParam Long id, @RequestParam String newPassword) {
         String resp = authService.resetPassword(id, newPassword);
@@ -72,7 +58,13 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/user/verifySignupOtp")
+    @PostMapping("/sendOtp")
+    public ResponseEntity<String> verifyEmail(@RequestParam String email) {
+        String res = authService.sendOtpToEmail(email);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/verifySignupOtp")
     public ResponseEntity<Long> verifyOtp(@RequestParam String email, @RequestParam String otp) {
         Long resp = authService.verifyUserEmailOtp(email, otp);
         return new ResponseEntity<>(resp, HttpStatus.OK);

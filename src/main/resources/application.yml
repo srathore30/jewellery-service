@@ -3,14 +3,12 @@ spring:
     url: jdbc:mysql://localhost:3306/jewellery_db
     username: root
     password: root
-<<<<<<< HEAD
     hikari:
       idle-timeout: 30000
       leak-detection-threshold: 2000
       connection-timeout: 30000
       maximum-pool-size: 5
-=======
->>>>>>> 184eeb7cd7815dd1fa7fcfccda09a27010c6e24f
+
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

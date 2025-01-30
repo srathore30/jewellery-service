@@ -32,17 +32,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.
                         requestMatchers("/swagger-ui/**","/v3/api-docs/swagger-config","/v3/api-docs/**","/swagger-ui/index.html").permitAll().
                         requestMatchers("/auth/login").permitAll().
-                        requestMatchers("/auth/create").permitAll().
-                        requestMatchers("/auth/createFamilyMember").permitAll().
                         requestMatchers("/auth/resetPassword").permitAll().
-                        requestMatchers("/auth/validateToken").permitAll().
-                        anyRequest().authenticated())
+                        anyRequest().permitAll())
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // if any exception come
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // nothing to save on server
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-//    http://api.smartsalonbot.com/auth-service/swagger-ui/index.html
-
 
 }

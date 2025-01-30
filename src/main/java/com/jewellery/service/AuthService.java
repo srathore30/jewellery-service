@@ -1,6 +1,5 @@
 package com.jewellery.service;
 
-import com.jewellery.dto.req.User.ImageUploadDto;
 import com.jewellery.dto.req.User.JwtRequest;
 import com.jewellery.dto.req.User.UserRequestDto;
 import com.jewellery.dto.req.User.UserUpdateRequestDto;
@@ -19,4 +18,5 @@ public interface AuthService extends UserDetailsService{
 
     Long verifyUserEmailOtp(String email, String otp);
 
+    String sendOtpToEmail(String email);
 }
