@@ -24,10 +24,6 @@ public class UserUpdateRequestDto {
     @Pattern(regexp = Constants.EMAIL_REGEX, message = "Invalid email, please enter valid email")
     String email;
 
-    List<Role> userType;
-
-    Status status;
-
     Long mobile;
 
 

@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user-service")
 @Setter
 public class AuthController {
 
@@ -72,26 +72,9 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/sendOtp")
-    public ResponseEntity<String> verifyEmail(@RequestParam String email) {
-        String res = authService.sendOtpToEmail(email);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-
     @PostMapping("/user/verifySignupOtp")
     public ResponseEntity<Long> verifyOtp(@RequestParam String email, @RequestParam String otp) {
         Long resp = authService.verifyUserEmailOtp(email, otp);
         return new ResponseEntity<>(resp, HttpStatus.OK);
-    }
-
-    @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadUserImage(@RequestBody ImageUploadDto imageUploadDto) {
-        return new ResponseEntity<>(authService.uploadUserImage(imageUploadDto),HttpStatus.OK);
-    }
-
-    @DeleteMapping("/deleteImage")
-    public ResponseEntity<String> deleteImage(@RequestParam String base64Url) {
-        String response = authService.deleteImage(base64Url);
-        return ResponseEntity.ok(response);
     }
 }

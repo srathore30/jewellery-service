@@ -34,17 +34,17 @@ public class UserAuthorizationInterceptor implements HandlerInterceptor {
                     return false;
                 }
                 String token = authorizationHeader.substring(7);
-                if(token.isEmpty()){
+                if (token.isEmpty()) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return false;
                 }
-                if(!validateToken(token)){
+                if (!validateToken(token)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return false;
                 }
-               Role[] Roles = getUserRole(token);
-                if(Roles != null){
-                    if(validateRole(allowedRoles, Roles)){
+                Role[] Roles = getUserRole(token);
+                if (Roles != null) {
+                    if (validateRole(allowedRoles, Roles)) {
                         return true;
                     }
                 }

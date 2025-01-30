@@ -17,11 +17,6 @@ public interface AuthService extends UserDetailsService{
 
     String resetPassword(Long id, String newPassword);
 
-    String sendOtpToEmail(String email);
-
     Long verifyUserEmailOtp(String email, String otp);
 
-    String uploadUserImage(ImageUploadDto imageUploadDto);
-
-    String deleteImage(String base64Url);
 }

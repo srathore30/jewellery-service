@@ -27,7 +27,8 @@ public enum ApiErrorCodes implements Error {
     PRODUCT_TYPE_ALREADY_EXIST(22240,"Product Type Already exist"),
     USER_ALREADY_EXIST(22241,"user already exists "),
     INVALID_MOBILE_NUMBER(22242,"invalid mobile number "),
-    ROLE_LIST_NOT_PRESENT(22243,"role list not present ");
+    ROLE_LIST_NOT_PRESENT(22243,"role list not present "),
+    INVALID_EMAIL(22244,"invalid email");
 
 
 

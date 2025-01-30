@@ -22,6 +22,8 @@ import com.jewellery.service.AuthService;
 import com.jewellery.util.ImageUploader;
 import com.jewellery.util.Validator;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,19 +36,21 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    @Autowired
-    private UserRepo userRepo;
-    @Autowired
-    private EmailService emailService;
-    @Autowired
-    private ImageUploader imageUploader;
-    @Autowired
-    private AuthConfig authConfig;
-    @Autowired
-    private JwtHelper jwtHelper;
-    @Autowired
-    private EmailOtpService emailOtpService;
+
+    private final UserRepo userRepo;
+
+    private final EmailService emailService;
+
+    private final ImageUploader imageUploader;
+
+    private final AuthConfig authConfig;
+
+    private final JwtHelper jwtHelper;
+
+    private final EmailOtpService emailOtpService;
 
     @Override
     @Transactional
@@ -58,6 +62,10 @@ public class AuthServiceImpl implements AuthService {
         }
         if (!Validator.isValidMobileNo(userRequestDto.getMobile())) {
             throw new ValidationException(ApiErrorCodes.INVALID_MOBILE_NUMBER.getErrorCode(), ApiErrorCodes.INVALID_MOBILE_NUMBER.getErrorMessage());
+        }
+        if (userRequestDto.getEmail() != null && !Validator.isValidEmail(userRequestDto.getEmail())) {
+            throw new ValidationException(ApiErrorCodes.INVALID_EMAIL.getErrorCode(),
+                    ApiErrorCodes.INVALID_EMAIL.getErrorMessage());
         }
         UserEntity user = this.mapDtoToEntity(userRequestDto);
         userRepo.save(user);
@@ -123,8 +131,6 @@ public class AuthServiceImpl implements AuthService {
 
     public UserEntity mapDtoToEntity(UserRequestDto userReqDto) {
         UserEntity userEntity = new UserEntity();
-        List<Role> roleList = userReqDto.getUserType();
-        userEntity.setRoleList(roleList);
         userEntity.setEmail(userReqDto.getEmail());
         if (userReqDto.getUserPhotoUrl() != null) {
             userEntity.setImageUrl(imageUploader.uploadFile(userReqDto.getUserPhotoUrl()));
@@ -132,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
         userEntity.setMobileNo(userReqDto.getMobile());
         userEntity.setPassword(authConfig.passwordEncoder().encode(userReqDto.getPassword()));
         userEntity.setName(userReqDto.getName());
-        userEntity.setStatus(userReqDto.getStatus());
+        userEntity.setStatus(Status.ACTIVE);
         if (CollectionUtils.isEmpty(userReqDto.getUserType())) {
             throw new ValidationException(ApiErrorCodes.ROLE_LIST_NOT_PRESENT.getErrorCode(), ApiErrorCodes.ROLE_LIST_NOT_PRESENT.getErrorMessage());
         }
@@ -142,8 +148,8 @@ public class AuthServiceImpl implements AuthService {
 
     public UserDetailsEntity mapToUserDetails(UserEntity user) {
         UserDetailsEntity userDetails = new UserDetailsEntity();
-        List<Role> roleList = user.getRoleList();
         userDetails.setMobileNo(user.getMobileNo());
+        userDetails.setPassword(user.getPassword());
         return userDetails;
     }
 
@@ -156,57 +162,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public void updateEntityFromDto(UserEntity userEntity, UserUpdateRequestDto userUpdateRequestDto) {
-
-        userEntity.setRoleList(userUpdateRequestDto.getUserType());
         userEntity.setEmail(userUpdateRequestDto.getEmail());
         userEntity.setMobileNo(userUpdateRequestDto.getMobile());
         if (!Objects.equals(userUpdateRequestDto.getProfilePhoto(), "")) {
             userEntity.setImageUrl(imageUploader.uploadFile(userUpdateRequestDto.getProfilePhoto()));
         }
         userEntity.setName(userUpdateRequestDto.getName());
-        userEntity.setStatus(userUpdateRequestDto.getStatus());
-        if (userUpdateRequestDto.getUserType() == null || userUpdateRequestDto.getUserType().isEmpty()) {
-            throw new ValidationException(ApiErrorCodes.ROLE_LIST_NOT_PRESENT.getErrorCode(), ApiErrorCodes.ROLE_LIST_NOT_PRESENT.getErrorMessage());
-        }
-        userEntity.setRoleList(userUpdateRequestDto.getUserType());
-    }
-
-    @Override
-    public String sendOtpToEmail(String email) {
-        emailOtpService.sendEmailCode(email);
-        return "otp send";
     }
 
     @Override
     public Long verifyUserEmailOtp(String email, String otp) {
-        Optional<UserEntity> optionalClients = userRepo.findByEmail(email);
-        if (optionalClients.isEmpty()) {
+        Optional<UserEntity> optionalUser = userRepo.findByEmail(email);
+        if (optionalUser.isEmpty()) {
             throw new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(), ApiErrorCodes.USER_NOT_FOUND.getErrorMessage());
         }
         boolean isValid = emailOtpService.verifyEmailCode(email, otp);
         if (!isValid) {
             throw new NoSuchElementFoundException(ApiErrorCodes.INVALID_EMAIL_CODE.getErrorCode(), ApiErrorCodes.INVALID_EMAIL_CODE.getErrorMessage());
         }
-        return optionalClients.get().getId();
+        return optionalUser.get().getId();
     }
-
-    @Override
-    public String uploadUserImage(ImageUploadDto imageUploadDto) {
-        Optional<UserEntity> optionalUserEntity = userRepo.findById(imageUploadDto.getUserId());
-        if (optionalUserEntity.isEmpty()) {
-            throw new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(), ApiErrorCodes.USER_NOT_FOUND.getErrorMessage());
-        }
-        String imageUrl = imageUploader.uploadFile(imageUploadDto.getUserPhotoUrl());
-        UserEntity userEntity = optionalUserEntity.get();
-        userEntity.setImageUrl(imageUrl);
-        userRepo.save(userEntity);
-        return imageUrl;
-    }
-    @Override
-    public String deleteImage(String base64Url) {
-        imageUploader.deleteImage(base64Url);
-        return "Image deleted successfully";
-    }
-
 }
 

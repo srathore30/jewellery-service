@@ -29,7 +29,7 @@ public class UserDetailsEntity implements UserDetails{
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
