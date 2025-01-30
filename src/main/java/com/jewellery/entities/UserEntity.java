@@ -5,7 +5,6 @@ import com.jewellery.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.util.List;
 
 @Getter
@@ -23,7 +22,7 @@ public class UserEntity extends BaseEntity {
     String imageUrl;
     String password;
     @Enumerated(EnumType.STRING)
-    List<Role> userRoleList;
+    List<Role> roleList;
     @Enumerated(EnumType.STRING)
     Status status;
     @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,10 +1,8 @@
 package com.jewellery.exception;
 
-public class UserAlreadyExistsException extends BaseException {
-
-    public UserAlreadyExistsException(int errorCode, String errorMessage) {
+public class InvalidInputException extends BaseException{
+    public InvalidInputException(int errorCode, String errorMessage) {
         super(errorCode, errorMessage);
-
     }
 
     @Override
@@ -15,5 +13,5 @@ public class UserAlreadyExistsException extends BaseException {
     @Override
     public String getErrorMessage() {
         return this.errorMessage;
-    }}
-
+    }
+}
