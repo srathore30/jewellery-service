@@ -126,7 +126,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         ProductTypeEntity entity = new ProductTypeEntity();
         entity.setName(request.getName());
         entity.setStatus(Status.ACTIVE);
-        entity.setImageUrl((request.getImageUrl()));
+        entity.setImageUrl(request.getImageUrl());
         entity.setProductCategory(category);
         return entity;
     }
