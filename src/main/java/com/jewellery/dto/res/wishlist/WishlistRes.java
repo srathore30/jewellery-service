@@ -1,5 +1,6 @@
 package com.jewellery.dto.res.wishlist;
 
+import com.jewellery.dto.res.product.ProductRes;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,8 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WishlistRes {
     Long Id;
-    Long productId;
-    String productName;
+    ProductRes product;
     Long userId;
     String userName;
     Integer quantity;

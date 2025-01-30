@@ -22,7 +22,7 @@ public class ProductEntity extends BaseEntity{
     String modelName;
     @Column(unique = true)
     Integer itemCode;
-    Boolean isAvailable;
+    boolean isAvailable;
     @Enumerated(EnumType.STRING)
     Status status;
     @Enumerated(EnumType.STRING)

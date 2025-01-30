@@ -1,6 +1,7 @@
 package com.jewellery.dto.res.productType;
 
 import com.jewellery.constant.Status;
+import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,5 +17,5 @@ public class ProductTypeRes {
     String name;
     String imageUrl;
     Status status;
-    Long productCategoryId;
+    ProductCategoryResponse productCategory;
 }
