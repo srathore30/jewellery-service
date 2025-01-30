@@ -1,5 +1,6 @@
 package com.jewellery.dto.res.cart;
 
+import com.jewellery.dto.res.product.ProductRes;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,8 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartResponse {
    Long cartId;
-   String productName;
-   Double productPrice;
+   ProductRes productRes;
    Integer quantity;
    Double totalPrice;
 }

@@ -21,7 +21,7 @@ public class ProductRes {
     String description;
     String modelName;
     Integer itemCode;
-    Boolean isAvailable;
+    boolean isAvailable;
     Status status;
     InventoryStatus inventoryStatus;
     Double sellingPrice;

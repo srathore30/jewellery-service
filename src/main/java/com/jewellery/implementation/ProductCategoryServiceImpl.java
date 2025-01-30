@@ -113,17 +113,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         response.setName(entity.getName());
         response.setDescription(entity.getDescription());
         response.setImageUrl(entity.getImageUrl());
-        List<ProductTypeRes> productTypeResList = entity.getProductTypes()
-                .stream()
-                .map(productTypeEntity -> {
-                    ProductTypeRes productTypeRes = new ProductTypeRes();
-                    productTypeRes.setId(productTypeEntity.getId());
-                    productTypeRes.setName(productTypeEntity.getName());
-                    return productTypeRes;
-                })
-                .collect(Collectors.toList());
-
-        response.setProductTypes(productTypeResList);
         return response;
     }
 }

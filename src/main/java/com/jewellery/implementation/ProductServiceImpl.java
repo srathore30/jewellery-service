@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setDescription(productReq.getDescription());
         productEntity.setModelName(productReq.getModelName());
         productEntity.setItemCode(productReq.getItemCode());
-        productEntity.setIsAvailable(productReq.isAvailable());
+        productEntity.setAvailable(productReq.isAvailable());
         productEntity.setInventoryStatus(productReq.getInventoryStatus());
         productEntity.setSellingPrice(productReq.getSellingPrice());
         productEntity.setProductImages(productReq.getProductImages());
@@ -142,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
         productRes.setDescription(productEntity.getDescription());
         productRes.setModelName(productEntity.getModelName());
         productRes.setItemCode(productEntity.getItemCode());
-        productRes.setIsAvailable(productEntity.getIsAvailable());
+        productRes.setAvailable(productEntity.isAvailable());
         productRes.setStatus(productEntity.getStatus());
         productRes.setInventoryStatus(productEntity.getInventoryStatus());
         productRes.setSellingPrice(productEntity.getSellingPrice());
@@ -151,19 +151,6 @@ public class ProductServiceImpl implements ProductService {
         productRes.setHighlights(productEntity.getHighlights());
         productRes.setKeyFeatures(productEntity.getKeyFeatures());
         productRes.setCreatedDate(productEntity.getCreatedDate());
-
-        ProductCategoryEntity productCategory = productEntity.getProductCategory();
-        ProductCategoryResponse categoryResponse = new ProductCategoryResponse();
-        categoryResponse.setId(productCategory.getId());
-        categoryResponse.setName(productCategory.getName());
-        productRes.setProductCategory(categoryResponse);
-
-        ProductTypeEntity productType = productEntity.getProductType();
-        ProductTypeRes productTypeRes = new ProductTypeRes();
-        productTypeRes.setId(productType.getId());
-        productTypeRes.setName(productType.getName());
-        productRes.setProductType(productTypeRes);
-
         return productRes;
     }
 
@@ -178,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setProductCategory(productCategory);
         productEntity.setProductType(productType);
         productEntity.setHighlights(productReq.getHighlights());
-        productEntity.setIsAvailable(productReq.isAvailable());
+        productEntity.setAvailable(productReq.isAvailable());
         productEntity.setInventoryStatus(productReq.getInventoryStatus());
         productEntity.setItemCode(productReq.getItemCode());
         productEntity.setKeyFeatures(productReq.getKeyFeatures());
@@ -186,7 +173,6 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setModelName(productReq.getModelName());
         productEntity.setSellingPrice(productReq.getSellingPrice());
         productEntity.setStatus(Status.ACTIVE);
-
         return productEntity;
     }
 }

@@ -18,7 +18,6 @@ public class ProductReq {
     Integer itemCode;
     boolean isAvailable;
     InventoryStatus inventoryStatus;
-    //Float overAllRating;
     Double sellingPrice;
     List<String> productImages;
     Double originalPrice;

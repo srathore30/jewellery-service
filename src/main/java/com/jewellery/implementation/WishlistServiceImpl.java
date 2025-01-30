@@ -98,12 +98,7 @@ public class WishlistServiceImpl implements WishlistService {
         wishlistRes.setUserId(wishlistEntity.getUserEntity().getId());
         wishlistRes.setUserName(wishlistEntity.getUserEntity().getName());
         wishlistRes.setQuantity(wishlistEntity.getQuantity());
-
-        ProductEntity product = wishlistEntity.getProductEntity();
-        ProductRes productRes = new ProductRes();
-        productRes.setId(product.getId());
-        productRes.setModelName(product.getModelName());
-        wishlistRes.setProduct(productRes);
+        wishlistRes.setProduct(mapProductEntityToDto(wishlistEntity.getProductEntity()));
 
         return wishlistRes;
     }
@@ -119,5 +114,24 @@ public class WishlistServiceImpl implements WishlistService {
         wishlistEntity.setQuantity(wishlistReq.getQuantity());
 
         return wishlistEntity;
+    }
+
+    private ProductRes mapProductEntityToDto(ProductEntity productEntity) {
+        ProductRes productRes = new ProductRes();
+        productRes.setId(productEntity.getId());
+        productRes.setTitle(productEntity.getTitle());
+        productRes.setDescription(productEntity.getDescription());
+        productRes.setModelName(productEntity.getModelName());
+        productRes.setItemCode(productEntity.getItemCode());
+        productRes.setAvailable(productEntity.isAvailable());
+        productRes.setStatus(productEntity.getStatus());
+        productRes.setInventoryStatus(productEntity.getInventoryStatus());
+        productRes.setSellingPrice(productEntity.getSellingPrice());
+        productRes.setProductImages(productEntity.getProductImages());
+        productRes.setOriginalPrice(productEntity.getOriginalPrice());
+        productRes.setHighlights(productEntity.getHighlights());
+        productRes.setKeyFeatures(productEntity.getKeyFeatures());
+        productRes.setCreatedDate(productEntity.getCreatedDate());
+        return productRes;
     }
 }

@@ -117,11 +117,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         response.setName(entity.getName());
         response.setImageUrl(entity.getImageUrl());
         response.setStatus(entity.getStatus());
-        ProductCategoryEntity category = entity.getProductCategory();
-        ProductCategoryResponse categoryResponse = new ProductCategoryResponse();
-        categoryResponse.setId(category.getId());
-        categoryResponse.setName(category.getName());
-        response.setProductCategory(categoryResponse);
+        response.setProductCategory(mapCategoryEntityToDto(entity.getProductCategory()));
         return response;
     }
 
@@ -134,6 +130,15 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         entity.setImageUrl(request.getImageUrl());
         entity.setProductCategory(category);
         return entity;
+    }
+
+    private ProductCategoryResponse mapCategoryEntityToDto(ProductCategoryEntity entity) {
+        ProductCategoryResponse response = new ProductCategoryResponse();
+        response.setId(entity.getId());
+        response.setName(entity.getName());
+        response.setDescription(entity.getDescription());
+        response.setImageUrl(entity.getImageUrl());
+        return response;
     }
 
 }
