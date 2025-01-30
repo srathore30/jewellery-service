@@ -4,6 +4,7 @@ import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.req.product.ProductReq;
 import com.jewellery.dto.res.product.ProductRes;
+import com.jewellery.dto.res.productType.ProductTypeRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.*;
 import com.jewellery.exception.NoSuchElementFoundException;
@@ -41,9 +42,8 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setDescription(productReq.getDescription());
         productEntity.setModelName(productReq.getModelName());
         productEntity.setItemCode(productReq.getItemCode());
-        productEntity.setIsAvailable(productReq.getIsAvailable());
+        productEntity.setIsAvailable(productReq.isAvailable());
         productEntity.setInventoryStatus(productReq.getInventoryStatus());
-        productEntity.setOverAllRating(productReq.getOverAllRating());
         productEntity.setSellingPrice(productReq.getSellingPrice());
         productEntity.setProductImages(productReq.getProductImages());
         productEntity.setOriginalPrice(productReq.getOriginalPrice());
@@ -144,13 +144,12 @@ public class ProductServiceImpl implements ProductService {
         productRes.setIsAvailable(productEntity.getIsAvailable());
         productRes.setStatus(productEntity.getStatus());
         productRes.setInventoryStatus(productEntity.getInventoryStatus());
-        productRes.setOverAllRating(productEntity.getOverAllRating());
         productRes.setSellingPrice(productEntity.getSellingPrice());
         productRes.setProductImages(productEntity.getProductImages());
         productRes.setOriginalPrice(productEntity.getOriginalPrice());
         productRes.setHighlights(productEntity.getHighlights());
         productRes.setKeyFeatures(productEntity.getKeyFeatures());
-        productRes.setProductTypeName(productEntity.getProductType().getName());
+        productRes.setProductTypeName(productRes.getProductTypeName());
         productRes.setProductCategoryName(productEntity.getProductCategory().getName());
         productRes.setCreatedDate(productEntity.getCreatedDate());
 
@@ -168,14 +167,13 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setProductCategory(productCategory);
         productEntity.setProductType(productType);
         productEntity.setHighlights(productReq.getHighlights());
-        productEntity.setIsAvailable(productReq.getIsAvailable());
+        productEntity.setIsAvailable(productReq.isAvailable());
         productEntity.setInventoryStatus(productReq.getInventoryStatus());
         productEntity.setItemCode(productReq.getItemCode());
         productEntity.setKeyFeatures(productReq.getKeyFeatures());
         productEntity.setOriginalPrice(productReq.getOriginalPrice());
         productEntity.setModelName(productReq.getModelName());
         productEntity.setSellingPrice(productReq.getSellingPrice());
-        productEntity.setOverAllRating(productReq.getOverAllRating());
         productEntity.setStatus(Status.ACTIVE);
 
         return productEntity;

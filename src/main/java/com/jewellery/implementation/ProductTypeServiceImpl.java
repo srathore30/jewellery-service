@@ -131,4 +131,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         return entity;
     }
 
+
+
+
 }
