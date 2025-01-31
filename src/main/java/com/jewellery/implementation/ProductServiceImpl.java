@@ -3,6 +3,7 @@ package com.jewellery.implementation;
 import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.req.product.ProductReq;
+import com.jewellery.dto.req.product.UpdateProductImagesReq;
 import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.productType.ProductTypeRes;
 import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
@@ -11,7 +12,9 @@ import com.jewellery.entities.*;
 import com.jewellery.exception.NoSuchElementFoundException;
 import com.jewellery.repositories.*;
 import com.jewellery.service.ProductService;
+import com.jewellery.service.SpecificationService;
 import com.jewellery.util.ImageUploader;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,8 +34,10 @@ public class ProductServiceImpl implements ProductService {
     private final ProductTypeRepo productTypeRepo;
     private final ProductCategoryRepo productCategoryRepo;
     private final ImageUploader imageUploader;
+    private  final SpecificationService specificationService;
 
     @Override
+    @Transactional
     public ProductRes createProduct(ProductReq productReq) {
         ProductEntity productEntity = mapDtoToEntity(productReq);
         ProductEntity savedProduct = productRepo.save(productEntity);
@@ -50,19 +55,35 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setAvailable(productReq.isAvailable());
         productEntity.setInventoryStatus(productReq.getInventoryStatus());
         productEntity.setSellingPrice(productReq.getSellingPrice());
-        if (productReq.getProductImages() != null && !productReq.getProductImages().isEmpty()) {
-            List<String> uploadedImages = productReq.getProductImages().stream()
-                    .map(imageUploader::uploadFile)
-                    .collect(Collectors.toList());
-            productEntity.setProductImages(uploadedImages);
-        }
         productEntity.setOriginalPrice(productReq.getOriginalPrice());
         productEntity.setHighlights(productReq.getHighlights());
         productEntity.setKeyFeatures(productReq.getKeyFeatures());
-
+        if (productReq.getUpdateProductImagesReq() != null) {
+            updateProductImages(productEntity, productReq.getUpdateProductImagesReq());
+        }
+        if (productReq.getSpecificationReq() != null) {
+            specificationService.updateSpecification(id, productReq.getSpecificationReq());
+        }
 
         return mapEntityToDto(productRepo.save(productEntity));
     }
+
+    private void updateProductImages(ProductEntity productEntity, UpdateProductImagesReq updateProductImagesReq) {
+        List<String> existingImages = productEntity.getProductImages();
+        if (updateProductImagesReq.getOldImagesList() != null) {
+            for (String oldImage : updateProductImagesReq.getOldImagesList()) {
+                existingImages.remove(oldImage);
+            }
+        }
+        if (updateProductImagesReq.getNewImagesList() != null && !updateProductImagesReq.getNewImagesList().isEmpty()) {
+            List<String> uploadedImages = updateProductImagesReq.getNewImagesList().stream()
+                    .map(imageUploader::uploadFile)
+                    .collect(Collectors.toList());
+            existingImages.addAll(uploadedImages);
+        }
+        productEntity.setProductImages(existingImages);
+    }
+
 
     @Override
     public ProductRes getProductById(Long id) {
@@ -183,8 +204,8 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setModelName(productReq.getModelName());
         productEntity.setSellingPrice(productReq.getSellingPrice());
         productEntity.setStatus(Status.ACTIVE);
-        if (productReq.getProductImages() != null && !productReq.getProductImages().isEmpty()) {
-            List<String> uploadedImages = productReq.getProductImages().stream()
+        if (productReq.getUpdateProductImagesReq() != null && productReq.getUpdateProductImagesReq().getNewImagesList() != null) {
+            List<String> uploadedImages = productReq.getUpdateProductImagesReq().getNewImagesList().stream()
                     .map(imageUploader::uploadFile)
                     .collect(Collectors.toList());
             productEntity.setProductImages(uploadedImages);

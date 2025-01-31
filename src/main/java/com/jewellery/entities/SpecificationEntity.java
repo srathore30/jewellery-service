@@ -16,13 +16,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SpecificationEntity extends BaseEntity{
     @OneToOne
-    @JoinColumn(name = "product_id", nullable = false, unique = true)
     private ProductEntity product;
 
     @Column(nullable = false, length = 50)
     private String silverPurity; // e.g., "925 Sterling"
 
-    @Column(nullable = false, precision = 8, scale = 2)
+    @Column(nullable = false, precision = 10)
     private Double weight; // in grams
 
     @Enumerated(EnumType.STRING)

@@ -7,11 +7,13 @@ import com.jewellery.dto.res.specification.SpecificationRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.dto.res.wishlist.WishlistRes;
 
+import java.util.Optional;
+
 public interface SpecificationService {
     SpecificationRes createSpecification(SpecificationReq specificationReq);
     SpecificationRes getSpecificationById(Long id);
     PaginatedResp<SpecificationRes> getAllSpecifications(int page, int size, String sortBy, String sortDirection);
-    PaginatedResp<SpecificationRes> getSpecificationByProductId(int page, int size, String sortBy, String sortDirection, Long productId);
+   // SpecificationRes getSpecificationByProductId(Long productId);
     SpecificationRes updateSpecification(Long id, SpecificationReq specificationReq);
 
 }
