@@ -19,5 +19,5 @@ public class ProductCategoryResponse {
     String name;
     String description;
     String imageUrl;
-    List<ProductTypeRes> productTypes;
+
 }
