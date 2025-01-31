@@ -82,12 +82,12 @@ public class SpecificationServiceImpl implements SpecificationService {
         );
     }
 
-   // @Override
-//    public SpecificationRes getSpecificationByProductId(Long productId) {
-//        SpecificationEntity specificationEntity = specificationRepo.findByProductId(productId).
-//                orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.SPECIFICATION_NOT_FOUND.getErrorCode(),ApiErrorCodes.SPECIFICATION_NOT_FOUND.getErrorMessage()));
-//        return mapEntityToDto(specificationEntity);
-//    }
+    @Override
+    public SpecificationRes getSpecificationByProductId(Long productId) {
+        SpecificationEntity specificationEntity = specificationRepo.findByProductId(productId).
+                orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.SPECIFICATION_NOT_FOUND.getErrorCode(),ApiErrorCodes.SPECIFICATION_NOT_FOUND.getErrorMessage()));
+        return mapEntityToDto(specificationEntity);
+    }
 
 
     private SpecificationRes mapEntityToDto(SpecificationEntity specificationEntity) {

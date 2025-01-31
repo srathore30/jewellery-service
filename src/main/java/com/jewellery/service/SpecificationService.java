@@ -13,7 +13,7 @@ public interface SpecificationService {
     SpecificationRes createSpecification(SpecificationReq specificationReq);
     SpecificationRes getSpecificationById(Long id);
     PaginatedResp<SpecificationRes> getAllSpecifications(int page, int size, String sortBy, String sortDirection);
-   // SpecificationRes getSpecificationByProductId(Long productId);
+    SpecificationRes getSpecificationByProductId(Long productId);
     SpecificationRes updateSpecification(Long id, SpecificationReq specificationReq);
 
 }

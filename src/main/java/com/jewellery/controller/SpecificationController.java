@@ -29,11 +29,11 @@ public class SpecificationController {
         SpecificationRes resp = specificationService.getSpecificationById(id);
         return  new ResponseEntity<>(resp,HttpStatus.OK);
     }
-//    @GetMapping("/product/{productId}")
-//    public ResponseEntity<SpecificationRes> getSpecificationByProductId(@PathVariable Long productId ){
-//        SpecificationRes resp = specificationService.getSpecificationByProductId(productId);
-//        return  new ResponseEntity<>(resp,HttpStatus.OK);
-//    }
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<SpecificationRes> getSpecificationByProductId(@PathVariable Long productId ){
+        SpecificationRes resp = specificationService.getSpecificationByProductId(productId);
+        return  new ResponseEntity<>(resp,HttpStatus.OK);
+    }
     @PutMapping("/{specificationId}")
     public ResponseEntity<SpecificationRes> updateSpecification(@RequestBody @Validated SpecificationReq specificationReq, @PathVariable Long specificationId) {
         SpecificationRes resp = specificationService.updateSpecification(specificationId, specificationReq);

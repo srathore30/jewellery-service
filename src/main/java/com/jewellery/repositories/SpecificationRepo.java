@@ -11,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface SpecificationRepo extends JpaRepository<SpecificationEntity,Long> {
-   // Optional<SpecificationEntity> findByProductId(Long productId);
+    Optional<SpecificationEntity> findByProductId(Long productId);
 }
