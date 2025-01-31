@@ -25,7 +25,11 @@ public enum ApiErrorCodes implements Error {
     CATEGORY_NOT_FOUND(22238,"Category not found"),
     PRODUCT_TYPE_NOT_FOUND(22239,"Product type not found"),
     PRODUCT_TYPE_ALREADY_EXIST(22240,"Product Type Already exist"),
-    PRODUCT_CATEGORY_NOT_FOUND(22241,"Product category not found");
+    USER_ALREADY_EXIST(22241,"user already exists "),
+    INVALID_MOBILE_NUMBER(22242,"invalid mobile number "),
+    ROLE_LIST_NOT_PRESENT(22243,"role list not present "),
+    INVALID_EMAIL(22244,"invalid email"),
+    PRODUCT_CATEGORY_NOT_FOUND(222341,"Product Category not found");
 
 
     private int errorCode;
