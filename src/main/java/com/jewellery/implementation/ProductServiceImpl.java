@@ -11,13 +11,17 @@ import com.jewellery.entities.*;
 import com.jewellery.exception.NoSuchElementFoundException;
 import com.jewellery.repositories.*;
 import com.jewellery.service.ProductService;
+import com.jewellery.util.ImageUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepo productRepo;
     private final ProductTypeRepo productTypeRepo;
     private final ProductCategoryRepo productCategoryRepo;
+    private final ImageUploader imageUploader;
 
     @Override
     public ProductRes createProduct(ProductReq productReq) {
@@ -42,11 +47,15 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setTitle(productReq.getTitle());
         productEntity.setDescription(productReq.getDescription());
         productEntity.setModelName(productReq.getModelName());
-        productEntity.setItemCode(productReq.getItemCode());
         productEntity.setAvailable(productReq.isAvailable());
         productEntity.setInventoryStatus(productReq.getInventoryStatus());
         productEntity.setSellingPrice(productReq.getSellingPrice());
-        productEntity.setProductImages(productReq.getProductImages());
+        if (productReq.getProductImages() != null && !productReq.getProductImages().isEmpty()) {
+            List<String> uploadedImages = productReq.getProductImages().stream()
+                    .map(imageUploader::uploadFile)
+                    .collect(Collectors.toList());
+            productEntity.setProductImages(uploadedImages);
+        }
         productEntity.setOriginalPrice(productReq.getOriginalPrice());
         productEntity.setHighlights(productReq.getHighlights());
         productEntity.setKeyFeatures(productReq.getKeyFeatures());
@@ -72,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductRes> responseList = productPage.getContent()
                 .stream()
+                .filter(product -> product.getStatus() != Status.INACTIVE)
                 .map(this::mapEntityToDto)
                 .collect(Collectors.toList());
 
@@ -167,12 +177,28 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setHighlights(productReq.getHighlights());
         productEntity.setAvailable(productReq.isAvailable());
         productEntity.setInventoryStatus(productReq.getInventoryStatus());
-        productEntity.setItemCode(productReq.getItemCode());
+        productEntity.setItemCode(generateItemCode());
         productEntity.setKeyFeatures(productReq.getKeyFeatures());
         productEntity.setOriginalPrice(productReq.getOriginalPrice());
         productEntity.setModelName(productReq.getModelName());
         productEntity.setSellingPrice(productReq.getSellingPrice());
         productEntity.setStatus(Status.ACTIVE);
+        if (productReq.getProductImages() != null && !productReq.getProductImages().isEmpty()) {
+            List<String> uploadedImages = productReq.getProductImages().stream()
+                    .map(imageUploader::uploadFile)
+                    .collect(Collectors.toList());
+            productEntity.setProductImages(uploadedImages);
+        }
         return productEntity;
+    }
+
+    private String generateItemCode() {
+        String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder code = new StringBuilder();
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < 6; i++) {
+            code.append(alphanumeric.charAt(random.nextInt(alphanumeric.length())));
+        }
+        return code.toString();
     }
 }

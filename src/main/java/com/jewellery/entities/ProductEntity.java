@@ -21,7 +21,7 @@ public class ProductEntity extends BaseEntity{
     String description;
     String modelName;
     @Column(unique = true)
-    Integer itemCode;
+    String itemCode;
     boolean isAvailable;
     @Enumerated(EnumType.STRING)
     Status status;

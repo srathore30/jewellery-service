@@ -179,6 +179,10 @@ public class AuthServiceImpl implements AuthService {
     }
     @Override
     public String sendOtpToEmail(String email) {
+        Optional<UserEntity> optionalUser = userRepo.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            throw new NoSuchElementFoundException(ApiErrorCodes.USER_NOT_FOUND.getErrorCode(), ApiErrorCodes.USER_NOT_FOUND.getErrorMessage());
+        }
         emailOtpService.sendEmailCode(email);
         return "otp send";
     }

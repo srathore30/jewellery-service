@@ -11,6 +11,7 @@ import com.jewellery.entities.ProductTypeEntity;
 import com.jewellery.exception.NoSuchElementFoundException;
 import com.jewellery.repositories.ProductCategoryRepo;
 import com.jewellery.service.ProductCategoryService;
+import com.jewellery.util.ImageUploader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +29,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
-
     private final ProductCategoryRepo productCategoryRepo;
-
-
-
+    private final ImageUploader imageUploader;
 
     @Override
     public ProductCategoryResponse createProductCategory(ProductCategoryRequest request) {
@@ -80,10 +78,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         productCategoryEntity.setName(request.getName());
         productCategoryEntity.setDescription(request.getDescription());
 
-        if (!Objects.equals(request.getImageUrl(), "")){
-            productCategoryEntity.setImageUrl((request.getImageUrl()));
+        if (!Objects.equals(request.getImageUrl(), "")) {
+            productCategoryEntity.setImageUrl(imageUploader.uploadFile(request.getImageUrl()));
         }
-        productCategoryEntity.setImageUrl(productCategoryEntity.getImageUrl());
         return mapEntityToDto(productCategoryRepo.save(productCategoryEntity));
     }
 
@@ -103,7 +100,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         entity.setName(request.getName());
         entity.setDescription(request.getDescription());
         entity.setStatus(Status.ACTIVE);
-        entity.setImageUrl(request.getImageUrl());
+        if (!Objects.equals(request.getImageUrl(), "")) {
+            entity.setImageUrl(imageUploader.uploadFile(request.getImageUrl()));
+        }
         return entity;
     }
 

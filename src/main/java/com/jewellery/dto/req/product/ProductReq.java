@@ -15,7 +15,6 @@ public class ProductReq {
     String title;
     String description;
     String modelName;
-    Integer itemCode;
     boolean isAvailable;
     InventoryStatus inventoryStatus;
     Double sellingPrice;

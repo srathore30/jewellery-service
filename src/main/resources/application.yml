@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/jewellery_db
     username: root
-    password: root
+    password: Princemitt@l26
     hikari:
       idle-timeout: 30000
       leak-detection-threshold: 2000

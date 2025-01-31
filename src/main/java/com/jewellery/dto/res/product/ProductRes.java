@@ -20,7 +20,7 @@ public class ProductRes {
     String title;
     String description;
     String modelName;
-    Integer itemCode;
+    String  itemCode;
     boolean isAvailable;
     Status status;
     InventoryStatus inventoryStatus;
