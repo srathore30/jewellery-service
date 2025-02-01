@@ -15,5 +15,4 @@ public class CartResponse {
    ProductRes productRes;
    Integer quantity;
    Double totalPrice;
-   SpecificationRes specification;
 }

@@ -8,6 +8,7 @@ import com.jewellery.dto.req.specification.SpecificationReq;
 import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.productType.ProductTypeRes;
 import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
+import com.jewellery.dto.res.specification.SpecificationRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.*;
 import com.jewellery.exception.NoSuchElementFoundException;
@@ -212,6 +213,8 @@ public class ProductServiceImpl implements ProductService {
         productRes.setCreatedDate(productEntity.getCreatedDate());
         productRes.setProductCategory(mapProductCategoryEntityToDto(productEntity.getProductCategory()));
         productRes.setProductType(mapProductTypeEntityToDto(productEntity.getProductType()));
+        productRes.setSpecification(mapSpecificationEntityToDto(productEntity.getSpecificationEntity()));
+
         return productRes;
     }
 
@@ -250,7 +253,7 @@ public class ProductServiceImpl implements ProductService {
         return productEntity;
     }
 
-    private ProductTypeRes mapProductTypeEntityToDto(ProductTypeEntity entity) {
+    public static ProductTypeRes mapProductTypeEntityToDto(ProductTypeEntity entity) {
         ProductTypeRes response = new ProductTypeRes();
         response.setId(entity.getId());
         response.setName(entity.getName());
@@ -259,13 +262,26 @@ public class ProductServiceImpl implements ProductService {
         return response;
     }
 
-    private ProductCategoryResponse mapProductCategoryEntityToDto(ProductCategoryEntity entity) {
+    public static ProductCategoryResponse mapProductCategoryEntityToDto(ProductCategoryEntity entity) {
         ProductCategoryResponse response = new ProductCategoryResponse();
         response.setId(entity.getId());
         response.setName(entity.getName());
         response.setDescription(entity.getDescription());
         response.setImageUrl(entity.getImageUrl());
         return response;
+    }
+
+        public static SpecificationRes mapSpecificationEntityToDto(SpecificationEntity specificationEntity) {
+        SpecificationRes specificationRes = new SpecificationRes();
+        specificationRes.setId(specificationEntity.getId());
+        specificationRes.setDesignType(specificationEntity.getDesignType());
+        specificationRes.setSize(specificationEntity.getSize());
+        specificationRes.setHallmark(specificationEntity.isHallmark());
+        specificationRes.setFinishType(specificationEntity.getFinishType());
+        specificationRes.setWeight(specificationEntity.getWeight());
+        specificationRes.setSilverPurity(specificationEntity.getSilverPurity());
+        specificationRes.setStoneType(specificationEntity.getStoneType());
+        return specificationRes;
     }
 
 }

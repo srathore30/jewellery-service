@@ -26,6 +26,8 @@ import com.jewellery.constant.ApiErrorCodes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.jewellery.implementation.ProductServiceImpl.*;
+
 @Service
 @RequiredArgsConstructor
 public class WishlistServiceImpl implements WishlistService {
@@ -100,8 +102,7 @@ public class WishlistServiceImpl implements WishlistService {
         wishlistRes.setUserId(wishlistEntity.getUserEntity().getId());
         wishlistRes.setUserName(wishlistEntity.getUserEntity().getName());
         wishlistRes.setQuantity(wishlistEntity.getQuantity());
-        wishlistRes.setProduct(mapProductEntityToDto(wishlistEntity.getProductEntity()));
-        wishlistRes.setSpecification(mapSpecificationEntityToDto(wishlistEntity.getProductEntity().getSpecificationEntity()));
+        wishlistRes.setProductRes(mapProductEntityToDto(wishlistEntity.getProductEntity()));
 
         return wishlistRes;
     }
@@ -127,7 +128,6 @@ public class WishlistServiceImpl implements WishlistService {
         productRes.setModelName(productEntity.getModelName());
         productRes.setItemCode(productEntity.getItemCode());
         productRes.setAvailable(productEntity.isAvailable());
-        productRes.setStatus(productEntity.getStatus());
         productRes.setInventoryStatus(productEntity.getInventoryStatus());
         productRes.setSellingPrice(productEntity.getSellingPrice());
         productRes.setProductImages(productEntity.getProductImages());
@@ -135,20 +135,9 @@ public class WishlistServiceImpl implements WishlistService {
         productRes.setHighlights(productEntity.getHighlights());
         productRes.setKeyFeatures(productEntity.getKeyFeatures());
         productRes.setCreatedDate(productEntity.getCreatedDate());
+        productRes.setProductCategory(mapProductCategoryEntityToDto(productEntity.getProductCategory()));
+        productRes.setProductType(mapProductTypeEntityToDto(productEntity.getProductType()));
+        productRes.setSpecification(mapSpecificationEntityToDto(productEntity.getSpecificationEntity()));
         return productRes;
-    }
-
-    private SpecificationRes mapSpecificationEntityToDto(SpecificationEntity specificationEntity) {
-        SpecificationRes specificationRes = new SpecificationRes();
-        specificationRes.setId(specificationEntity.getId());
-        specificationRes.setDesignType(specificationEntity.getDesignType());
-        specificationRes.setSize(specificationEntity.getSize());
-        specificationRes.setHallmark(specificationEntity.isHallmark());
-        specificationRes.setFinishType(specificationEntity.getFinishType());
-        specificationRes.setWeight(specificationEntity.getWeight());
-        specificationRes.setSilverPurity(specificationEntity.getSilverPurity());
-        specificationRes.setStoneType(specificationEntity.getStoneType());
-        specificationRes.setProductRes(mapProductEntityToDto(specificationEntity.getProduct()));
-        return specificationRes;
     }
 }

@@ -16,5 +16,5 @@ public class WishlistRes {
     Long userId;
     String userName;
     Integer quantity;
-    SpecificationRes specification;
+    ProductRes productRes;
 }

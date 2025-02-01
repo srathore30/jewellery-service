@@ -4,6 +4,7 @@ import com.jewellery.constant.InventoryStatus;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.res.productType.ProductTypeRes;
 import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
+import com.jewellery.dto.res.specification.SpecificationRes;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -32,4 +33,5 @@ public class ProductRes {
     String keyFeatures;
     ProductTypeRes productType;
     ProductCategoryResponse productCategory;
+    SpecificationRes specification;
 }
