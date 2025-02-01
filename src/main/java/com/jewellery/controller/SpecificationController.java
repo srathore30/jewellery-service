@@ -40,14 +40,4 @@ public class SpecificationController {
         return new ResponseEntity<>(resp,HttpStatus.OK);
     }
 
-    @GetMapping("/getAllSpecification")
-    public ResponseEntity<PaginatedResp<SpecificationRes>> getAllSpecification(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdTime") String sortBy,
-            @RequestParam(defaultValue = "ASC") String sortDirection) {
-        PaginatedResp<SpecificationRes> resp = specificationService.getAllSpecifications(page, size, sortBy, sortDirection);
-        return new ResponseEntity<>(resp,HttpStatus.OK);
-    }
-
 }

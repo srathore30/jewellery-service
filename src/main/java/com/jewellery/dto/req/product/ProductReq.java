@@ -26,5 +26,6 @@ public class ProductReq {
     Long productTypeId;
     Long productCategoryId;
     SpecificationReq specificationReq;
+    List<String> tags;
 
 }

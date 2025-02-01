@@ -4,6 +4,7 @@ import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.constant.Status;
 import com.jewellery.dto.req.product.ProductReq;
 import com.jewellery.dto.req.product.UpdateProductImagesReq;
+import com.jewellery.dto.req.specification.SpecificationReq;
 import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.productType.ProductTypeRes;
 import com.jewellery.dto.res.productcategory.ProductCategoryResponse;
@@ -21,11 +22,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.jewellery.util.CodeGenerator.generateItemCode;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +45,17 @@ public class ProductServiceImpl implements ProductService {
     public ProductRes createProduct(ProductReq productReq) {
         ProductEntity productEntity = mapDtoToEntity(productReq);
         ProductEntity savedProduct = productRepo.save(productEntity);
+
+        if (productReq.getSpecificationReq() != null) {
+            SpecificationReq specificationReq = productReq.getSpecificationReq();
+            specificationReq.setProductId(savedProduct.getId());
+            specificationService.createSpecification(specificationReq);
+        }
+        if (!CollectionUtils.isEmpty(productReq.getTags())) {
+            savedProduct.setTags(productReq.getTags().stream()
+                    .map(tag -> new TagsEntity(savedProduct, tag))
+                    .collect(Collectors.toList()));
+        }
         return mapEntityToDto(savedProduct);
     }
 
@@ -64,18 +79,31 @@ public class ProductServiceImpl implements ProductService {
         if (productReq.getSpecificationReq() != null) {
             specificationService.updateSpecification(id, productReq.getSpecificationReq());
         }
+        if (productReq.getTags() != null) {
+            List<TagsEntity> existingTags = productEntity.getTags();
+            List<String> newTags = productReq.getTags();
+            existingTags.removeIf(tag -> !newTags.contains(tag.getTag()));
+            for (String tag : newTags) {
+                if (existingTags.stream().noneMatch(t -> t.getTag().equals(tag))) {
+                    existingTags.add(new TagsEntity(productEntity, tag));
+                }
+            }
+            productEntity.setTags(existingTags);
+        }
+
+
 
         return mapEntityToDto(productRepo.save(productEntity));
     }
 
     private void updateProductImages(ProductEntity productEntity, UpdateProductImagesReq updateProductImagesReq) {
         List<String> existingImages = productEntity.getProductImages();
-        if (updateProductImagesReq.getOldImagesList() != null) {
+        if ( !CollectionUtils.isEmpty(updateProductImagesReq.getOldImagesList())) {
             for (String oldImage : updateProductImagesReq.getOldImagesList()) {
                 existingImages.remove(oldImage);
             }
         }
-        if (updateProductImagesReq.getNewImagesList() != null && !updateProductImagesReq.getNewImagesList().isEmpty()) {
+        if (!CollectionUtils.isEmpty(updateProductImagesReq.getNewImagesList())) {
             List<String> uploadedImages = updateProductImagesReq.getNewImagesList().stream()
                     .map(imageUploader::uploadFile)
                     .collect(Collectors.toList());
@@ -182,6 +210,8 @@ public class ProductServiceImpl implements ProductService {
         productRes.setHighlights(productEntity.getHighlights());
         productRes.setKeyFeatures(productEntity.getKeyFeatures());
         productRes.setCreatedDate(productEntity.getCreatedDate());
+        productRes.setProductCategory(mapProductCategoryEntityToDto(productEntity.getProductCategory()));
+        productRes.setProductType(mapProductTypeEntityToDto(productEntity.getProductType()));
         return productRes;
     }
 
@@ -210,16 +240,32 @@ public class ProductServiceImpl implements ProductService {
                     .collect(Collectors.toList());
             productEntity.setProductImages(uploadedImages);
         }
+
+        if (!CollectionUtils.isEmpty(productReq.getTags())) {
+            productEntity.setTags(productReq.getTags().stream()
+                    .map(tag -> new TagsEntity(productEntity, tag))
+                    .collect(Collectors.toList()));
+        }
+
         return productEntity;
     }
 
-    private String generateItemCode() {
-        String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder();
-        SecureRandom random = new SecureRandom();
-        for (int i = 0; i < 6; i++) {
-            code.append(alphanumeric.charAt(random.nextInt(alphanumeric.length())));
-        }
-        return code.toString();
+    private ProductTypeRes mapProductTypeEntityToDto(ProductTypeEntity entity) {
+        ProductTypeRes response = new ProductTypeRes();
+        response.setId(entity.getId());
+        response.setName(entity.getName());
+        response.setImageUrl(entity.getImageUrl());
+        response.setStatus(entity.getStatus());
+        return response;
     }
+
+    private ProductCategoryResponse mapProductCategoryEntityToDto(ProductCategoryEntity entity) {
+        ProductCategoryResponse response = new ProductCategoryResponse();
+        response.setId(entity.getId());
+        response.setName(entity.getName());
+        response.setDescription(entity.getDescription());
+        response.setImageUrl(entity.getImageUrl());
+        return response;
+    }
+
 }

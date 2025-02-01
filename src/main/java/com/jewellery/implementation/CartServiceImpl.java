@@ -4,9 +4,11 @@ import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.dto.req.cart.CartRequest;
 import com.jewellery.dto.res.cart.CartResponse;
 import com.jewellery.dto.res.product.ProductRes;
+import com.jewellery.dto.res.specification.SpecificationRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.CartEntity;
 import com.jewellery.entities.ProductEntity;
+import com.jewellery.entities.SpecificationEntity;
 import com.jewellery.entities.UserEntity;
 import com.jewellery.exception.NoSuchElementFoundException;
 import com.jewellery.exception.ValidationException;
@@ -127,6 +129,7 @@ public class CartServiceImpl implements CartService {
         response.setProductRes(mapProductEntityToDto(cart.getProductEntity()));
         response.setQuantity(cart.getQuantity());
         response.setTotalPrice(cart.getQuantity() * cart.getProductEntity().getSellingPrice());
+        response.setSpecification(mapSpecificationEntityToDto(cart.getProductEntity().getSpecificationEntity()));
         return response;
     }
 
@@ -147,5 +150,19 @@ public class CartServiceImpl implements CartService {
         productRes.setKeyFeatures(productEntity.getKeyFeatures());
         productRes.setCreatedDate(productEntity.getCreatedDate());
         return productRes;
+    }
+
+    private SpecificationRes mapSpecificationEntityToDto(SpecificationEntity specificationEntity) {
+        SpecificationRes specificationRes = new SpecificationRes();
+        specificationRes.setId(specificationEntity.getId());
+        specificationRes.setDesignType(specificationEntity.getDesignType());
+        specificationRes.setSize(specificationEntity.getSize());
+        specificationRes.setHallmark(specificationEntity.isHallmark());
+        specificationRes.setFinishType(specificationEntity.getFinishType());
+        specificationRes.setWeight(specificationEntity.getWeight());
+        specificationRes.setSilverPurity(specificationEntity.getSilverPurity());
+        specificationRes.setStoneType(specificationEntity.getStoneType());
+        specificationRes.setProductRes(mapProductEntityToDto(specificationEntity.getProduct()));
+        return specificationRes;
     }
 }

@@ -62,33 +62,11 @@ public class SpecificationServiceImpl implements SpecificationService {
     }
 
     @Override
-    public PaginatedResp<SpecificationRes> getAllSpecifications(int page, int size, String sortBy, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<SpecificationEntity> specificationPage = specificationRepo.findAll(pageable);
-
-        List<SpecificationRes> responseList = specificationPage.getContent()
-                .stream()
-                .map(this::mapEntityToDto)
-                .collect(Collectors.toList());
-
-        return new PaginatedResp<>(
-                specificationPage.getTotalElements(),
-                specificationPage.getTotalPages(),
-                page,
-                responseList
-        );
-    }
-
-    @Override
     public SpecificationRes getSpecificationByProductId(Long productId) {
         SpecificationEntity specificationEntity = specificationRepo.findByProductId(productId).
                 orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.SPECIFICATION_NOT_FOUND.getErrorCode(),ApiErrorCodes.SPECIFICATION_NOT_FOUND.getErrorMessage()));
         return mapEntityToDto(specificationEntity);
     }
-
 
     private SpecificationRes mapEntityToDto(SpecificationEntity specificationEntity) {
         SpecificationRes specificationRes = new SpecificationRes();
