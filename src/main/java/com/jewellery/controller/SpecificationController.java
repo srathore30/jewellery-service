@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SpecificationController {
     private final SpecificationService specificationService;
-
-    @PostMapping("/create")
     public ResponseEntity<SpecificationRes> createSpecification(@RequestBody SpecificationReq specificationReq) {
         SpecificationRes resp = specificationService.createSpecification(specificationReq);
         return new ResponseEntity<>(resp, HttpStatus.CREATED);
