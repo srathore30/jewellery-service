@@ -29,7 +29,8 @@ public enum ApiErrorCodes implements Error {
     INVALID_MOBILE_NUMBER(22242,"invalid mobile number "),
     ROLE_LIST_NOT_PRESENT(22243,"role list not present "),
     INVALID_EMAIL(22244,"invalid email"),
-    SPECIFICATION_NOT_FOUND(22245,"Specification Not found");
+    SPECIFICATION_NOT_FOUND(22245,"Specification Not found"),
+    ADDRESS_NOT_FOUND(22246,"Address Not found");
 
 
     private int errorCode;
