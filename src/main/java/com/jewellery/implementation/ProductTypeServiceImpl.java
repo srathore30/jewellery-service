@@ -12,6 +12,7 @@ import com.jewellery.exception.NoSuchElementFoundException;
 import com.jewellery.repositories.ProductCategoryRepo;
 import com.jewellery.repositories.ProductTypeRepo;
 import com.jewellery.service.ProductTypeService;
+import com.jewellery.util.ImageUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 
     private final ProductTypeRepo productTypeRepo;
     private final ProductCategoryRepo productCategoryRepo;
+    private final ImageUploader imageUploader;
 
     @Override
     public ProductTypeRes createProductType(ProductTypeReq request) {
@@ -44,10 +46,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
                 .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.PRODUCT_TYPE_NOT_FOUND.getErrorCode(), ApiErrorCodes.PRODUCT_TYPE_NOT_FOUND.getErrorMessage()));
 
         productTypeEntity.setName(request.getName());
-        if (!Objects.equals(request.getImageUrl(), "")){
-            productTypeEntity.setImageUrl((request.getImageUrl()));
+        if (!Objects.equals(request.getImageUrl(), "")) {
+            productTypeEntity.setImageUrl(imageUploader.uploadFile(request.getImageUrl()));
         }
-        productTypeEntity.setImageUrl(productTypeEntity.getImageUrl());
         return mapEntityToDto(productTypeRepo.save(productTypeEntity));
     }
 
@@ -123,11 +124,13 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 
     private ProductTypeEntity mapDtoToEntity(ProductTypeReq request) {
         ProductCategoryEntity category = productCategoryRepo.findById(request.getProductCategoryId())
-                .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.CATEGORY_NOT_FOUND.getErrorCode(), ApiErrorCodes.CATEGORY_NOT_FOUND.getErrorMessage()));
+                .orElseThrow(() -> new NoSuchElementFoundException(ApiErrorCodes.PRODUCT_CATEGORY_NOT_FOUND.getErrorCode(), ApiErrorCodes.PRODUCT_CATEGORY_NOT_FOUND.getErrorMessage()));
         ProductTypeEntity entity = new ProductTypeEntity();
         entity.setName(request.getName());
         entity.setStatus(Status.ACTIVE);
-        entity.setImageUrl(request.getImageUrl());
+        if (!Objects.equals(request.getImageUrl(), "")) {
+            entity.setImageUrl(imageUploader.uploadFile(request.getImageUrl()));
+        }
         entity.setProductCategory(category);
         return entity;
     }

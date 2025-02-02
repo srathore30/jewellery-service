@@ -1,6 +1,7 @@
 package com.jewellery.dto.res.cart;
 
 import com.jewellery.dto.res.product.ProductRes;
+import com.jewellery.dto.res.specification.SpecificationRes;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

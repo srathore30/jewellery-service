@@ -21,13 +21,14 @@ public class ProductEntity extends BaseEntity{
     String description;
     String modelName;
     @Column(unique = true)
-    Integer itemCode;
+    String itemCode;
     boolean isAvailable;
     @Enumerated(EnumType.STRING)
     Status status;
     @Enumerated(EnumType.STRING)
     InventoryStatus inventoryStatus;
     Float overAllRating;
+    @Column(precision = 10)
     Double sellingPrice;
     List<String> productImages;
     Double originalPrice;
@@ -41,7 +42,7 @@ public class ProductEntity extends BaseEntity{
     String keyFeatures;
     @ManyToOne
     ProductTypeEntity productType;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    SpecificationEntity specificationEntity;
+    @OneToOne
+    SpecificationEntity specificationEntity;
     ProductCategoryEntity productCategory;
 }
