@@ -1,6 +1,7 @@
 package com.jewellery.implementation;
 
 import com.jewellery.dto.req.wishlist.WishlistReq;
+import com.jewellery.dto.res.User.JwtResponse;
 import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.specification.SpecificationRes;
 import com.jewellery.dto.res.wishlist.WishlistRes;
@@ -103,6 +104,7 @@ public class WishlistServiceImpl implements WishlistService {
         wishlistRes.setUserName(wishlistEntity.getUserEntity().getName());
         wishlistRes.setQuantity(wishlistEntity.getQuantity());
         wishlistRes.setProductRes(mapProductEntityToDto(wishlistEntity.getProductEntity()));
+        wishlistRes.setUser(mapUserEntityToDto(wishlistEntity.getUserEntity()));
 
         return wishlistRes;
     }
@@ -139,5 +141,13 @@ public class WishlistServiceImpl implements WishlistService {
         productRes.setProductType(mapProductTypeEntityToDto(productEntity.getProductType()));
         productRes.setSpecification(mapSpecificationEntityToDto(productEntity.getSpecificationEntity()));
         return productRes;
+    }
+
+    public JwtResponse mapUserEntityToDto(UserEntity user) {
+        JwtResponse jwtResponse = new JwtResponse();
+        jwtResponse.setUserName(user.getName());
+        jwtResponse.setImageUrl(user.getImageUrl());
+        jwtResponse.setStatus(user.getStatus());
+        return jwtResponse;
     }
 }

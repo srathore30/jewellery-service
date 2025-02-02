@@ -2,6 +2,7 @@ package com.jewellery.implementation;
 
 import com.jewellery.constant.ApiErrorCodes;
 import com.jewellery.dto.req.cart.CartRequest;
+import com.jewellery.dto.res.User.JwtResponse;
 import com.jewellery.dto.res.cart.CartResponse;
 import com.jewellery.dto.res.product.ProductRes;
 import com.jewellery.dto.res.specification.SpecificationRes;
@@ -15,6 +16,7 @@ import com.jewellery.exception.ValidationException;
 import com.jewellery.repositories.CartRepo;
 import com.jewellery.repositories.ProductRepo;
 import com.jewellery.repositories.UserRepo;
+import com.jewellery.service.AuthService;
 import com.jewellery.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -131,6 +133,7 @@ public class CartServiceImpl implements CartService {
         response.setProductRes(mapProductEntityToDto(cart.getProductEntity()));
         response.setQuantity(cart.getQuantity());
         response.setTotalPrice(cart.getQuantity() * cart.getProductEntity().getSellingPrice());
+        response.setUser(mapUserEntityToDto(cart.getUserEntity()));
         return response;
     }
 
@@ -153,5 +156,13 @@ public class CartServiceImpl implements CartService {
         productRes.setProductType(mapProductTypeEntityToDto(productEntity.getProductType()));
         productRes.setSpecification(mapSpecificationEntityToDto(productEntity.getSpecificationEntity()));
         return productRes;
+    }
+
+    public JwtResponse mapUserEntityToDto(UserEntity user) {
+        JwtResponse jwtResponse = new JwtResponse();
+        jwtResponse.setUserName(user.getName());
+        jwtResponse.setImageUrl(user.getImageUrl());
+        jwtResponse.setStatus(user.getStatus());
+        return jwtResponse;
     }
 }
