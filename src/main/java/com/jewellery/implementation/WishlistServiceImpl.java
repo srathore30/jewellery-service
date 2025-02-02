@@ -2,9 +2,11 @@ package com.jewellery.implementation;
 
 import com.jewellery.dto.req.wishlist.WishlistReq;
 import com.jewellery.dto.res.product.ProductRes;
+import com.jewellery.dto.res.specification.SpecificationRes;
 import com.jewellery.dto.res.wishlist.WishlistRes;
 import com.jewellery.dto.res.util.PaginatedResp;
 import com.jewellery.entities.ProductEntity;
+import com.jewellery.entities.SpecificationEntity;
 import com.jewellery.entities.UserEntity;
 import com.jewellery.entities.WishlistEntity;
 import com.jewellery.exception.NoSuchElementFoundException;
@@ -23,6 +25,8 @@ import com.jewellery.constant.ApiErrorCodes;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.jewellery.implementation.ProductServiceImpl.*;
 
 @Service
 @RequiredArgsConstructor
@@ -98,7 +102,7 @@ public class WishlistServiceImpl implements WishlistService {
         wishlistRes.setUserId(wishlistEntity.getUserEntity().getId());
         wishlistRes.setUserName(wishlistEntity.getUserEntity().getName());
         wishlistRes.setQuantity(wishlistEntity.getQuantity());
-        wishlistRes.setProduct(mapProductEntityToDto(wishlistEntity.getProductEntity()));
+        wishlistRes.setProductRes(mapProductEntityToDto(wishlistEntity.getProductEntity()));
 
         return wishlistRes;
     }
@@ -124,7 +128,6 @@ public class WishlistServiceImpl implements WishlistService {
         productRes.setModelName(productEntity.getModelName());
         productRes.setItemCode(productEntity.getItemCode());
         productRes.setAvailable(productEntity.isAvailable());
-        productRes.setStatus(productEntity.getStatus());
         productRes.setInventoryStatus(productEntity.getInventoryStatus());
         productRes.setSellingPrice(productEntity.getSellingPrice());
         productRes.setProductImages(productEntity.getProductImages());
@@ -132,6 +135,9 @@ public class WishlistServiceImpl implements WishlistService {
         productRes.setHighlights(productEntity.getHighlights());
         productRes.setKeyFeatures(productEntity.getKeyFeatures());
         productRes.setCreatedDate(productEntity.getCreatedDate());
+        productRes.setProductCategory(mapProductCategoryEntityToDto(productEntity.getProductCategory()));
+        productRes.setProductType(mapProductTypeEntityToDto(productEntity.getProductType()));
+        productRes.setSpecification(mapSpecificationEntityToDto(productEntity.getSpecificationEntity()));
         return productRes;
     }
 }

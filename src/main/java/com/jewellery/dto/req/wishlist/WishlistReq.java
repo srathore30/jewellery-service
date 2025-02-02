@@ -1,5 +1,6 @@
 package com.jewellery.dto.req.wishlist;
 
+import com.jewellery.dto.req.specification.SpecificationReq;
 import com.jewellery.entities.ProductEntity;
 import com.jewellery.entities.UserEntity;
 import jakarta.persistence.ManyToOne;
